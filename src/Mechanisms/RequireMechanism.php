@@ -28,12 +28,10 @@ class RequireMechanism
     {
         $command = $library->command;
 
-        if ($library->canBeDevOnly && confirm("Do you want to install {$library->name} as a dev dependency?")) {
-            $command .= ' --dev';
-        }
+        $dev = $library->canBeDevOnly && confirm("Do you want to install {$library->name} as a dev dependency?");
 
         try {
-            $installed = $this->composer->requirePackages([$command]);
+            $installed = $this->composer->requirePackages([$command], $dev);
 
             if (! $installed) {
                 throw FailedToRequireException::fromLibrary($library);
