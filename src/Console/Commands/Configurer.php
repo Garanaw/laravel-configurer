@@ -8,6 +8,7 @@ use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\InstallerContract;
 use Garanaw\LaravelConfigurer\Library;
+use Illuminate\Config\Repository;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -29,7 +30,7 @@ class Configurer extends Command
         InstallerContract $installer,
     ): void {
         info('Running the Configurer...');
-        $available = collect($config->get('configurer.libraries'));
+        $available = $this->collectInstallableLibraries($config, $composer);
 
         $selected = multiselect(
             label: 'Select the libraries to install',
@@ -43,6 +44,12 @@ class Configurer extends Command
         $result = $installer->run($toInstall);
 
         info(sprintf('%s libraries have been installed.', $result->count()));
+    }
+
+    protected function collectInstallableLibraries(Repository $config, Composer $composer): Enumerable
+    {
+        return collect($config->get('configurer.libraries'))
+            ->filter(static fn (Library $library) => $composer->hasPackage($library->command) === false);
     }
 
     protected function prepareLibraries(Enumerable $available, array $selected, Composer $composer): Enumerable
