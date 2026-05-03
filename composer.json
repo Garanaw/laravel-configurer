@@ -1,0 +1,36 @@
+{
+    "name": "garanaw/laravel-configurer",
+    "description": "A command to pre-configure some useful libraries for Laravel",
+    "type": "library",
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.29",
+        "orchestra/testbench": "^11.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Garanaw\\LaravelConfigurer\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Garanaw",
+            "email": "garanaw@gmail.com"
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Garanaw\\LaravelConfigurer\\LaravelConfigurerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
