@@ -22,8 +22,7 @@ class InstallMechanism
 
     public function __construct(
         protected readonly Dispatcher $events,
-    ) {
-    }
+    ) {}
 
     public function execute(Library $library, When $when): void
     {

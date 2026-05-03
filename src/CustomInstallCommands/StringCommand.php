@@ -16,8 +16,7 @@ class StringCommand implements InstallCommand
     public function __construct(
         private readonly Kernel $artisan,
         private readonly string $command,
-    ) {
-    }
+    ) {}
 
     public function when(): When
     {

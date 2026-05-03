@@ -31,8 +31,7 @@ class Library extends Fluent
         bool $needsMigrating = false,
         bool $canBeDevOnly = false,
         ?array $envVars = null,
-    )
-    {
+    ) {
         parent::__construct([
             'name' => $name,
             'command' => $command,

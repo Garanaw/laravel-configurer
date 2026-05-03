@@ -29,8 +29,7 @@ class SeedableMigrationsInstall implements InstallCommand
     public function __construct(
         private readonly Application $app,
         private readonly FilesystemManager $filesystem,
-    ) {
-    }
+    ) {}
 
     public function when(): When
     {
