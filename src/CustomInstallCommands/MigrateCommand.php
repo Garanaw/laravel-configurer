@@ -39,14 +39,14 @@ class MigrateCommand implements CustomCommand
             return true;
         }
 
-        if ($this->dependenciesMissing($libraries)) {
+        if ($this->hasMissingDependencies($libraries)) {
             return false;
         }
 
         return $this->kernel->call('migrate', ['--force', '--step']) === 0;
     }
 
-    private function dependenciesMissing(Enumerable $libraries): bool
+    private function hasMissingDependencies(Enumerable $libraries): bool
     {
         $dependencies = $this->dependsOn();
 
@@ -57,7 +57,7 @@ class MigrateCommand implements CustomCommand
         $allCommands = $libraries->flatMap(static fn (Library $library) => $library->installCommands)->all();
 
         foreach ($dependencies as $dependency) {
-            if (array_any($allCommands, static fn($command) => $command::class === $dependency)) {
+            if (array_any($allCommands, static fn ($command) => $command::class === $dependency)) {
                 return true;
             }
         }

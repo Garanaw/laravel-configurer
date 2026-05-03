@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Console\Commands;
 
-use Garanaw\LaravelConfigurer\CustomInstallCommands\CustomCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\InstallerContract;
