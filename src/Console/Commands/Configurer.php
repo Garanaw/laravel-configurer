@@ -49,7 +49,7 @@ class Configurer extends Command
     protected function collectInstallableLibraries(Repository $config, Composer $composer): Enumerable
     {
         return collect($config->get('configurer.libraries'))
-            ->filter(static fn (Library $library) => $composer->hasPackage($library->command) === false);
+            ->filter(static fn (array $library) => $composer->hasPackage($library['command']) === false);
     }
 
     protected function prepareLibraries(Enumerable $available, array $selected, Composer $composer): Enumerable
