@@ -39,7 +39,7 @@ class Installer implements InstallerContract
     {
         /** @var Library $library */
         foreach ($libraries as $library) {
-            if (! confirm("Do you still want to install {$library->name}?")) {
+            if (! confirm(sprintf('Do you still want to install %s?', $library->name))) {
                 $this->rejected[] = $library;
 
                 continue;
@@ -51,7 +51,7 @@ class Installer implements InstallerContract
                 // First run all the preparation commands for the given library if any
                 $this->installer->execute($library, When::START);
             } catch (Throwable $e) {
-                error("Failed to install commands before requiring {$library->name}: {$e->getMessage()}");
+                error(sprintf('Failed to install commands before requiring %s: %s', $library->name, $e->getMessage()));
 
                 continue;
             }
@@ -60,7 +60,7 @@ class Installer implements InstallerContract
                 // Require the library...
                 $this->requirer->execute($library);
             } catch (Throwable $e) {
-                error("Failed to require {$library->name}: {$e->getMessage()}");
+                error(sprintf('Failed to require %s: %s', $library->name, $e->getMessage()));
 
                 continue;
             }
@@ -69,7 +69,7 @@ class Installer implements InstallerContract
                 // Publish all the available assets
                 $this->publisher->execute($library);
             } catch (Throwable $e) {
-                error("Failed to publish {$library->name}: {$e->getMessage()}");
+                error(sprintf('Failed to publish %s: %s', $library->name, $e->getMessage()));
 
                 continue;
             }
@@ -78,18 +78,18 @@ class Installer implements InstallerContract
                 // And run the installation commands that should be run right after the library is installed
                 $this->installer->execute($library, When::END);
             } catch (Throwable $e) {
-                error("Failed to install {$library->name}: {$e->getMessage()}");
+                error(sprintf('Failed to run install commands for %s: %s', $library->name, $e->getMessage()));
 
                 continue;
             }
         }
 
         // Lastly run all the commands that should be run after the entire installation process is done
-        foreach ($this->libraries as $library) {
+        foreach ($libraries as $library) {
             try {
                 $this->installer->execute($library, When::END_ALL);
             } catch (Throwable $e) {
-                error("Failed to run after all install commands for {$library->name}: {$e->getMessage()}");
+                error(sprintf('Failed to run after all install commands for %s: %s', $library->name, $e->getMessage()));
 
                 continue;
             }
