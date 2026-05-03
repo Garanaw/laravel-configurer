@@ -9,7 +9,5 @@ use Throwable;
 
 class LibraryFailedInstalling
 {
-    public function __construct(public Library $library, public Throwable $exception)
-    {
-    }
+    public function __construct(public Library $library, public Throwable $exception) {}
 }

@@ -11,8 +11,8 @@ use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
 

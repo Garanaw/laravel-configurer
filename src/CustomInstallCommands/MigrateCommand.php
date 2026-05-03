@@ -13,10 +13,7 @@ class MigrateCommand implements InstallCommand
 {
     use CanRun;
 
-    public function __construct(
-        private readonly Kernel $kernel,
-    ) {
-    }
+    public function __construct(private readonly Kernel $kernel) {}
 
     public function when(): When
     {

@@ -11,6 +11,5 @@ class LibraryFailedRequiring
     public function __construct(
         public Library $library,
         public \Throwable $exception,
-    ) {
-    }
+    ) {}
 }

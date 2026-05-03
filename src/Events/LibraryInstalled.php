@@ -8,7 +8,5 @@ use Garanaw\LaravelConfigurer\Library;
 
 class LibraryInstalled
 {
-    public function __construct(public Library $library)
-    {
-    }
+    public function __construct(public Library $library) {}
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Mechanisms\Publishers;
 
-use;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Console\Kernel;
 
@@ -12,8 +11,7 @@ class ProviderPublisher implements PublisherContract
 {
     public function __construct(
         private readonly Kernel $artisan,
-    ) {
-    }
+    ) {}
 
     public function publish(Library $library): void
     {
@@ -27,6 +25,6 @@ class ProviderPublisher implements PublisherContract
         /** @var class-string $provider */
         $provider = $library->publishCommands['provider'];
 
-        return "vendor:publish --provider=\"{$provider}\"";
+        return sprintf('vendor:publish --provider="%s"', $provider);
     }
 }
