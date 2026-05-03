@@ -22,9 +22,9 @@ class LaravelConfigurerServiceProvider extends ServiceProvider
             ->needs(Composer::class)
             ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
 
-        $this->app->when(Installer::class
+        $this->app->when(Installer::class)
             ->needs(Composer::class)
-            ->give(static fn ($app) => new Composer($app['files'], $app->basePath())));
+            ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
 
         $this->app->when(RequireMechanism::class)
             ->needs(Composer::class)
