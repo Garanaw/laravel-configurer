@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer;
 
-use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
+use Garanaw\LaravelConfigurer\CustomInstallCommands\LibraryCommand;
 use Illuminate\Support\Enumerable;
 use Illuminate\Support\Fluent;
 
 /**
  * @property-read string $name
  * @property-read string $command
- * @property-read Enumerable<InstallCommand> $installCommands
+ * @property-read Enumerable<LibraryCommand> $installCommands
  * @property-read ?list<string> $publishCommands
  * @property-read ?bool $needsMigrating
  * @property-read bool $canBeDevOnly

@@ -17,7 +17,5 @@ interface InstallCommand
 
     public function command(): string;
 
-    public function install(Library $library): bool;
-
     public function dependsOn(): ?array;
 }

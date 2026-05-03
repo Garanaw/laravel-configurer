@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Console\Commands;
 
+use Garanaw\LaravelConfigurer\CustomInstallCommands\CustomCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\InstallerContract;
@@ -17,6 +18,7 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;
 
@@ -44,6 +46,23 @@ class Configurer extends Command
         $result = $installer->run($toInstall);
 
         info(sprintf('%s libraries have been installed.', $result->count()));
+
+        // Now run the custom commands
+        $allCommands = $config->get('configurer.commands', []);
+
+        foreach ($allCommands as $command) {
+            $command = $this->mapCommand($command);
+
+            if (! confirm(sprintf('Do you want to run the command %s now?', $command->command()))) {
+                continue;
+            }
+
+            try {
+                $command->install($result);
+            } catch (\Throwable $e) {
+                info(sprintf('Failed to run command %s: %s', $command->command(), $e->getMessage()));
+            }
+        }
     }
 
     protected function collectInstallableLibraries(Repository $config, Composer $composer): Enumerable
@@ -70,28 +89,7 @@ class Configurer extends Command
             $toInstall[] = new Library(
                 name: $library['name'],
                 command: $library['command'],
-                installCommands: collect($library['installCommands'] ?? [])
-                    ->map(function (string|InstallCommand $command): InstallCommand {
-                        // Already a command, return the instance
-                        if ($command instanceof InstallCommand) {
-                            return $command;
-                        }
-
-                        // If it's a string, check if it's a class that exists and implements InstallCommand, if so resolve it from the container
-                        if (class_exists($command) && is_a($command, InstallCommand::class, true)) {
-                            return resolve($command);
-                        }
-
-                        // If it's a string, and it's a class that exists, but it does not implement the InstallCommand interface,
-                        // we can only alert the user
-                        if (class_exists($command)) {
-                            throw new \RuntimeException("The command {$command} is not a valid install command. It must implement the InstallCommand interface.");
-                        }
-
-                        // Lastly, we assume that it is a string command that needs to be run in the artisan console,
-                        // so we create a new StringCommand instance for it
-                        return new StringCommand(artisan: resolve(Kernel::class), command: $command);
-                    }),
+                installCommands: collect($library['installCommands'] ?? [])->map($this->mapCommand(...)),
                 publishCommands: $library['publishCommands'] ?? null,
                 needsMigrating: $library['needsMigrating'] ?? false,
                 canBeDevOnly: $library['canBeDevOnly'] ?? false,
@@ -100,5 +98,28 @@ class Configurer extends Command
         }
 
         return collect($toInstall);
+    }
+
+    protected function mapCommand(string|InstallCommand $command): InstallCommand
+    {
+        // Already a command, return the instance
+        if ($command instanceof InstallCommand) {
+            return $command;
+        }
+
+        // If it's a string, check if it's a class that exists and implements InstallCommand, if so resolve it from the container
+        if (class_exists($command) && is_a($command, InstallCommand::class, true)) {
+            return resolve($command);
+        }
+
+        // If it's a string, and it's a class that exists, but it does not implement the InstallCommand interface,
+        // we can only alert the user
+        if (class_exists($command)) {
+            throw new \RuntimeException("The command {$command} is not a valid install command. It must implement the InstallCommand interface.");
+        }
+
+        // Lastly, we assume that it is a string command that needs to be run in the artisan console,
+        // so we create a new StringCommand instance for it
+        return new StringCommand(artisan: resolve(Kernel::class), command: $command);
     }
 }

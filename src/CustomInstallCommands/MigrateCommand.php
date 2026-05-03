@@ -8,8 +8,9 @@ use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Support\Enumerable;
 
-class MigrateCommand implements InstallCommand
+class MigrateCommand implements CustomCommand
 {
     use CanRun;
 
@@ -32,8 +33,35 @@ class MigrateCommand implements InstallCommand
         ];
     }
 
-    public function install(Library $library): bool
+    public function install(Enumerable $libraries): bool
     {
+        if ($this->didRun()) {
+            return true;
+        }
+
+        if ($this->dependenciesMissing($libraries)) {
+            return false;
+        }
+
         return $this->kernel->call('migrate', ['--force', '--step']) === 0;
+    }
+
+    private function dependenciesMissing(Enumerable $libraries): bool
+    {
+        $dependencies = $this->dependsOn();
+
+        if (empty($dependencies)) {
+            return false;
+        }
+
+        $allCommands = $libraries->flatMap(static fn (Library $library) => $library->installCommands)->all();
+
+        foreach ($dependencies as $dependency) {
+            if (array_any($allCommands, static fn($command) => $command::class === $dependency)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
