@@ -26,8 +26,7 @@ class RequireMechanism
     public function __construct(
         protected readonly Composer $composer,
         protected readonly Dispatcher $events,
-    ) {
-    }
+    ) {}
 
     public function execute(Library $library): void
     {

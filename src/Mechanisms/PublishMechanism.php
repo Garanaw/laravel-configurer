@@ -21,8 +21,7 @@ class PublishMechanism
     public function __construct(
         protected readonly PublisherManager $publisher,
         protected readonly Dispatcher $events,
-    ) {
-    }
+    ) {}
 
     public function execute(Library $library): void
     {

@@ -11,8 +11,7 @@ class CommandPublisher implements PublisherContract
 {
     public function __construct(
         private readonly Kernel $artisan,
-    ) {
-    }
+    ) {}
 
     public function publish(Library $library): void
     {

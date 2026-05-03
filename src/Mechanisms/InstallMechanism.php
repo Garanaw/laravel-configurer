@@ -27,7 +27,7 @@ class InstallMechanism
 
     public function execute(Library $library, When $when): void
     {
-        if (!$library->hasInstallCommands()) {
+        if (! $library->hasInstallCommands()) {
             info("No installation commands for {$library->name}, skipping installation.");
             return;
         }
@@ -37,7 +37,7 @@ class InstallMechanism
         );
 
         foreach ($targetCommands as $command) {
-            if (!confirm("Do you want to run {$command->command()} now?")) {
+            if (! confirm("Do you want to run {$command->command()} now?")) {
                 continue;
             }
 
@@ -59,7 +59,7 @@ class InstallMechanism
             $command->setRan(true);
         }
 
-        if (!isset($this->failedToInstall[$library->name])) {
+        if (! isset($this->failedToInstall[$library->name])) {
             $library->installed();
         }
 

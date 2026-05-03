@@ -33,8 +33,7 @@ class Installer implements InstallerContract
         protected readonly RequireMechanism $requirer,
         protected readonly PublishMechanism $publisher,
         protected readonly InstallMechanism $installer,
-    ) {
-    }
+    ) {}
 
     public function run(Enumerable $libraries): Enumerable
     {
