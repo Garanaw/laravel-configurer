@@ -15,7 +15,6 @@ use Throwable;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
-use function Laravel\Prompts\warning;
 
 class InstallMechanism
 {

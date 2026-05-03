@@ -94,7 +94,7 @@ return [
             ],
             'installCommands' => [
                 SeedableMigrationsInstall::class,
-            ]
+            ],
         ],
         // Spatie libraries
         [

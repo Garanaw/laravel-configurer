@@ -8,14 +8,14 @@ use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\InstallerContract;
 use Garanaw\LaravelConfigurer\Library;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
+
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;
 
