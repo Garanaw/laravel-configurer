@@ -38,29 +38,12 @@ class Configurer extends Command
             required: true,
         );
 
-//        $composerJson = $composer->findComposerFile()
-//                |> file_get_contents(...)
-//                |> (static fn($x) => json_decode($x, true, flags: JSON_THROW_ON_ERROR));
-
         $toInstall = $this->prepareLibraries($available, $selected, $composer);
 
         $result = $installer->run($toInstall);
 
         info(sprintf('%s libraries have been installed.', $result->count()));
-
-//        $needMigrating = $result->first(static fn (Library $library) => $library->needsMigrating);
-
-//        if ($needMigrating) {
-//            $this->migrateIfConfirmed();
-//        }
     }
-
-//    protected function migrateIfConfirmed(): void
-//    {
-//        if (confirm('Some libraries require running migrations, do you want to run them now?')) {
-//            $this->call('migrate --step');
-//        }
-//    }
 
     protected function prepareLibraries(Enumerable $available, array $selected, Composer $composer): Enumerable
     {
