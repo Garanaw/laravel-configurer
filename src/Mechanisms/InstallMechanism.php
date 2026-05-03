@@ -28,6 +28,7 @@ class InstallMechanism
     {
         if (! $library->hasInstallCommands()) {
             info("No installation commands for {$library->name}, skipping installation.");
+
             return;
         }
 

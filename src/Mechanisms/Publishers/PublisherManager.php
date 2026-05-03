@@ -13,7 +13,7 @@ class PublisherManager extends Manager
 
     public function driver($driver = null): PublisherContract
     {
-        if (!$driver instanceof Library) {
+        if (! $driver instanceof Library) {
             throw new \InvalidArgumentException('Driver must be an instance of ' . Library::class);
         }
 
