@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Mechanisms;
 
-use Garanaw\LaravelConfigurer\CustomInstallCommands\LibraryCommand;
+use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Events\LibraryFailedInstalling;
 use Garanaw\LaravelConfigurer\Events\LibraryInstalled;
@@ -33,7 +33,7 @@ class InstallMechanism
         }
 
         $targetCommands = $library->installCommands->filter(
-            static fn (LibraryCommand $command) => $command->when()->is($when)
+            static fn (InstallCommand $command) => $command->when()->is($when)
         );
 
         foreach ($targetCommands as $command) {
