@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Garanaw\LaravelConfigurer\CustomInstallCommands\MigrateCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\SeedableMigrationsInstall;
+use Garanaw\LaravelConfigurer\CustomInstallCommands\SetEnvVarsCommand;
 
 return [
     'libraries' => [
@@ -185,7 +186,9 @@ return [
         ],
     ],
 
+    // Custom Commands
     'customCommands' => [
         MigrateCommand::class,
+        SetEnvVarsCommand::class,
     ],
 ];
