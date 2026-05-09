@@ -12,12 +12,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
 use Throwable;
 
-use function Laravel\Prompts\alert;
 use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\error;
-use function Laravel\Prompts\info;
-use function Laravel\Prompts\note;
-use function Laravel\Prompts\warning;
 
 class RequireMechanism
 {
@@ -34,17 +29,7 @@ class RequireMechanism
 
         $dev = $library->canBeDevOnly && confirm("Do you want to install {$library->name} as a dev dependency?");
 
-        $output = function ($type, $line) {
-            $writer = match ($type) {
-                'info' => info(...),
-                'warning' => warning(...),
-                'alert' => alert(...),
-                'error' => error(...),
-                default => note(...),
-            };
-
-            $writer($line);
-        };
+        $output = prompts_output(...);
 
         try {
             $installed = $this->composer->requirePackages([$command], $dev, $output);

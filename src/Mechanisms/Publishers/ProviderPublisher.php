@@ -16,8 +16,9 @@ class ProviderPublisher implements PublisherContract
     public function publish(Library $library): void
     {
         $command = $this->buildCommand($library);
+        $output = prompts_output(...);
 
-        $this->artisan->call($command);
+        $this->artisan->call($command, outputBuffer: $output);
     }
 
     protected function buildCommand(Library $library): string

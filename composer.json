@@ -13,7 +13,10 @@
     "autoload": {
         "psr-4": {
             "Garanaw\\LaravelConfigurer\\": "src"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
