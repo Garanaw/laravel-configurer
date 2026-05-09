@@ -47,7 +47,7 @@ return [
             'name' => 'Laravel Reverb',
             'command' => 'laravel/reverb',
             'installCommands' => [
-                'install:broadcasting',
+//                'install:broadcasting',
                 'reverb:install',
             ],
             'envVars' => [
