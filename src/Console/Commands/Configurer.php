@@ -28,7 +28,7 @@ class Configurer extends Command
 {
     protected $signature = 'configurer:run
                             {--all : Installs all libraries without selecting individually}
-                            {--no-interaction : Run all the installations selected without confirmation}
+                            {--auto-confirm : Run all the installations selected without confirmation}
                             {--dev : Installs all the dev libraries under the "dev" section in composer}
                             {--no-publish : Skip the publish commands for the libraries}
                             {--no-install : Skip the install commands for the libraries}
@@ -87,7 +87,7 @@ class Configurer extends Command
     {
         return new Options([
             'all' => $this->option('all') ?? false,
-            'autoConfirm' => $this->option('no-interaction') ?? false,
+            'autoConfirm' => $this->option('auto-confirm') ?? false,
             'devOnly' => $this->option('dev') ?? false,
             'noPublish' => $this->option('no-publish') ?? false,
             'noInstall' => $this->option('no-install') ?? false,
