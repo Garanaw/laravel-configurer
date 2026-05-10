@@ -6,9 +6,12 @@ namespace Garanaw\LaravelConfigurer;
 
 use Garanaw\LaravelConfigurer\Console\Commands\Configurer;
 use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Composer;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class LaravelConfigurerServiceProvider extends ServiceProvider
 {
@@ -29,6 +32,13 @@ class LaravelConfigurerServiceProvider extends ServiceProvider
         $this->app->when(RequireMechanism::class)
             ->needs(Composer::class)
             ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
+
+        $this->app->when(RequireMechanism::class)
+            ->needs(OutputStyle::class)
+            ->give(static fn ($app) => resolve(OutputStyle::class, [
+                'input' => new ArgvInput(),
+                'output' => new ConsoleOutput(),
+            ]));
     }
 
     public function boot(): void
