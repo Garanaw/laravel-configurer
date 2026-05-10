@@ -105,8 +105,15 @@ return [
         ],
         [
             'name' => 'Spatie Media Library',
-            'command' => 'spatie/media-library',
+            'command' => 'spatie/laravel-medialibrary',
             'needsMigrating' => true,
+            'publishCommands' => [
+                'provider' => 'Spatie\MediaLibrary\MediaLibraryServiceProvider',
+                'tags' => [
+                    'medialibrary-migrations',
+                    'medialibrary-config',
+                ]
+            ]
         ],
         [
             'name' => 'Spatie Laravel Tags',
