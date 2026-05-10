@@ -6,25 +6,35 @@ namespace Garanaw\LaravelConfigurer\Console\Commands;
 
 use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
+use Garanaw\LaravelConfigurer\Dto\Options;
 use Garanaw\LaravelConfigurer\InstallerContract;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Config\Repository;
 use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;
 
-#[Signature('configurer:run')]
+#[AsCommand('configurer:run')]
 #[Description('Pre-configures the application with some useful libraries and settings')]
 class Configurer extends Command
 {
+    protected $signature = 'configurer:run
+                            {--all : Installs all libraries without selecting individually}
+                            {--no-interaction : Run all the installations selected without confirmation}
+                            {--dev : Installs all the dev libraries under the "dev" section in composer}
+                            {--no-publish : Skip the publish commands for the libraries}
+                            {--no-install : Skip the install commands for the libraries}
+                            {--no-migrate : Skip running any migrations for the libraries}
+                            {--no-env : Skip setting up any environment variables for the libraries}';
+
     public function handle(
         Composer $composer,
         Config $config,
@@ -32,17 +42,20 @@ class Configurer extends Command
     ): void {
         info('Running the Configurer...');
         $available = $this->collectInstallableLibraries($config, $composer);
+        $options = $this->makeOptions();
 
-        $selected = multiselect(
+        $availableSelection = $available->pluck('name')->toArray();
+
+        $selected = $options->all ? $availableSelection : multiselect(
             label: 'Select the libraries to install',
-            options: $available->pluck('name')->toArray(),
+            options: $availableSelection,
             scroll: 10,
             required: true,
         );
 
         $toInstall = $this->prepareLibraries($available, $selected, $composer);
 
-        $result = $installer->run($toInstall);
+        $result = $installer->run($toInstall, $options);
 
         info(sprintf('%s libraries have been installed.', $result->count()));
 
@@ -70,9 +83,23 @@ class Configurer extends Command
             ->filter(static fn (array $library) => $composer->hasPackage($library['command']) === false);
     }
 
+    protected function makeOptions(): Options
+    {
+        return new Options([
+            'all' => $this->option('all') ?? false,
+            'autoConfirm' => $this->option('no-interaction') ?? false,
+            'devOnly' => $this->option('dev') ?? false,
+            'noPublish' => $this->option('no-publish') ?? false,
+            'noInstall' => $this->option('no-install') ?? false,
+            'noMigrate' => $this->option('no-migrate') ?? false,
+            'noEnv' => $this->option('no-env') ?? false,
+        ]);
+    }
+
     protected function prepareLibraries(Enumerable $available, array $selected, Composer $composer): Enumerable
     {
         $toInstall = [];
+        $commander = $this->mapCommand(...);
 
         foreach ($available as $library) {
             if (! in_array($library['name'], $selected, true)) {
@@ -88,7 +115,7 @@ class Configurer extends Command
             $toInstall[] = new Library(
                 name: $library['name'],
                 command: $library['command'],
-                installCommands: collect($library['installCommands'] ?? [])->map($this->mapCommand(...)),
+                installCommands: collect($library['installCommands'] ?? [])->map($commander),
                 publishCommands: $library['publishCommands'] ?? null,
                 needsMigrating: $library['needsMigrating'] ?? false,
                 canBeDevOnly: $library['canBeDevOnly'] ?? false,

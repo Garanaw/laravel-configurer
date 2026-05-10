@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer;
 
+use Garanaw\LaravelConfigurer\Dto\Options;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Events\LibraryStartedInstalling;
 use Garanaw\LaravelConfigurer\Mechanisms\InstallMechanism;
 use Garanaw\LaravelConfigurer\Mechanisms\PublishMechanism;
 use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
@@ -30,59 +32,61 @@ class Installer implements InstallerContract
         protected readonly Composer $composer,
         protected readonly Dispatcher $events,
         protected readonly Kernel $artisan,
-        protected readonly RequireMechanism $requirer,
         protected readonly PublishMechanism $publisher,
+        protected readonly RequireMechanism $requirer,
         protected readonly InstallMechanism $installer,
     ) {}
 
-    public function run(Enumerable $libraries): Enumerable
+    public function run(Enumerable $libraries, Options $options): Enumerable
     {
-        /** @var Library $library */
-        foreach ($libraries as $library) {
-            if (! confirm(sprintf('Do you still want to install %s?', $library->name))) {
-                $this->rejected[] = $library;
+        $this->requirer->install($libraries, $options);
 
-                continue;
-            }
-
-            $this->events->dispatch(new LibraryStartedInstalling($library));
-
-            try {
-                // First run all the preparation commands for the given library if any
-                $this->installer->execute($library, When::START);
-            } catch (Throwable $e) {
-                error(sprintf('Failed to install commands before requiring %s: %s', $library->name, $e->getMessage()));
-
-                continue;
-            }
-
-            try {
-                // Require the library...
-                $this->requirer->execute($library);
-            } catch (Throwable $e) {
-                error(sprintf('Failed to require %s: %s', $library->name, $e->getMessage()));
-
-                continue;
-            }
-
-            try {
-                // Publish all the available assets
-                $this->publisher->execute($library);
-            } catch (Throwable $e) {
-                error(sprintf('Failed to publish %s: %s', $library->name, $e->getMessage()));
-
-                continue;
-            }
-
-            try {
-                // And run the installation commands that should be run right after the library is installed
-                $this->installer->execute($library, When::END);
-            } catch (Throwable $e) {
-                error(sprintf('Failed to run install commands for %s: %s', $library->name, $e->getMessage()));
-
-                continue;
-            }
-        }
+//        /** @var Library $library */
+//        foreach ($libraries as $library) {
+//            if (! $options->autoConfirm && ! confirm(sprintf('Do you still want to install %s?', $library->name))) {
+//                $this->rejected[] = $library;
+//
+//                continue;
+//            }
+//
+//            $this->events->dispatch(new LibraryStartedInstalling($library));
+//
+//            try {
+//                // First run all the preparation commands for the given library if any
+//                $this->installer->execute($library, When::START);
+//            } catch (Throwable $e) {
+//                error(sprintf('Failed to install commands before requiring %s: %s', $library->name, $e->getMessage()));
+//
+//                continue;
+//            }
+//
+//            try {
+//                // Require the library...
+//                $this->requirer->execute($library);
+//            } catch (Throwable $e) {
+//                error(sprintf('Failed to require %s: %s', $library->name, $e->getMessage()));
+//
+//                continue;
+//            }
+//
+//            try {
+//                // Publish all the available assets
+//                $this->publisher->execute($library);
+//            } catch (Throwable $e) {
+//                error(sprintf('Failed to publish %s: %s', $library->name, $e->getMessage()));
+//
+//                continue;
+//            }
+//
+//            try {
+//                // And run the installation commands that should be run right after the library is installed
+//                $this->installer->execute($library, When::END);
+//            } catch (Throwable $e) {
+//                error(sprintf('Failed to run install commands for %s: %s', $library->name, $e->getMessage()));
+//
+//                continue;
+//            }
+//        }
 
         // Lastly run all the commands that should be run after the entire installation process is done
         foreach ($libraries as $library) {

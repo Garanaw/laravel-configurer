@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Mechanisms;
 
+use Garanaw\LaravelConfigurer\Dto\Options;
 use Garanaw\LaravelConfigurer\Events\LibraryFailedRequiring;
 use Garanaw\LaravelConfigurer\Events\LibraryRequired;
 use Garanaw\LaravelConfigurer\Exception\FailedToRequireException;
 use Garanaw\LaravelConfigurer\Library;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
+use Illuminate\Support\Enumerable;
 use Throwable;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
 
 class RequireMechanism
 {
@@ -21,7 +25,62 @@ class RequireMechanism
     public function __construct(
         protected readonly Composer $composer,
         protected readonly Dispatcher $events,
+        protected readonly OutputStyle $output,
     ) {}
+
+    public function install(Enumerable $libraries, Options $options): void
+    {
+        $commands = $this->buildCommands($libraries, $options);
+
+        try {
+            $installed = $this->composer->requirePackages(
+                packages: $commands['toInstall'],
+                output: $this->output ?? prompts_output(...),
+            );
+        } catch (Throwable $e) {
+            error(sprintf('Failed to require packages: %s', $e->getMessage()));
+        }
+
+        if ($commands['devToInstall'] !== null) {
+            try {
+                $installedDev = $this->composer->requirePackages(
+                    packages: $commands['devToInstall'],
+                    dev: true,
+                    output: $this->output ?? prompts_output(...),
+                );
+            } catch (Throwable $e) {
+                error(sprintf('Failed to require dev packages: %s', $e->getMessage()));
+            }
+        }
+    }
+
+    protected function buildCommands(Enumerable $libraries, Options $options): array
+    {
+        /**
+         * @var Enumerable<Library> $dev
+         * @var Enumerable<Library> $noDev
+         */
+        [$dev, $noDev] = $libraries->partition(static fn (Library $library) => $library->canBeDevOnly);
+
+        $commands = [
+            'toInstall' => $noDev->map(static fn (Library $library) => $library->command),
+            'devToInstall' => null,
+        ];
+
+        if ($options->devOnly) {
+            $commands['devToInstall'] = $dev->map(static fn (Library $library) => $library->command);
+        } else {
+            foreach ($dev as $library) {
+                if (confirm(sprintf('Do you want to install %s as a dev dependency?', $library->name))) {
+                    $commands['devToInstall'][] = $library->command;
+                } else {
+                    $commands['toInstall'][] = $library->command;
+                }
+            }
+        }
+
+        return $commands;
+    }
 
     public function execute(Library $library): void
     {
