@@ -63,7 +63,7 @@ class RequireMechanism
         [$dev, $noDev] = $libraries->partition(static fn (Library $library) => $library->canBeDevOnly);
 
         $commands = [
-            'toInstall' => $noDev->map(static fn (Library $library) => $library->command),
+            'toInstall' => $noDev->map(static fn (Library $library) => $library->command)->all(),
             'devToInstall' => [],
         ];
 
@@ -79,10 +79,7 @@ class RequireMechanism
             }
         }
 
-        return [
-            'toInstall' => $commands['toInstall']->all(),
-            'devToInstall' => $commands['devToInstall']->all(),
-        ];
+        return $commands;
     }
 
     public function execute(Library $library): void
