@@ -35,18 +35,18 @@ class RequireMechanism
         try {
             $installed = $this->composer->requirePackages(
                 packages: $commands['toInstall'],
-                output: $this->output ?? prompts_output(...),
+                output: $this->output,
             );
         } catch (Throwable $e) {
             error(sprintf('Failed to require packages: %s', $e->getMessage()));
         }
 
-        if ($commands['devToInstall'] !== null) {
+        if (! empty($commands['devToInstall'])) {
             try {
                 $installedDev = $this->composer->requirePackages(
                     packages: $commands['devToInstall'],
                     dev: true,
-                    output: $this->output ?? prompts_output(...),
+                    output: $this->output,
                 );
             } catch (Throwable $e) {
                 error(sprintf('Failed to require dev packages: %s', $e->getMessage()));
@@ -64,7 +64,7 @@ class RequireMechanism
 
         $commands = [
             'toInstall' => $noDev->map(static fn (Library $library) => $library->command),
-            'devToInstall' => null,
+            'devToInstall' => [],
         ];
 
         if ($options->devOnly) {
@@ -79,7 +79,10 @@ class RequireMechanism
             }
         }
 
-        return $commands;
+        return [
+            'toInstall' => $commands['toInstall']->all(),
+            'devToInstall' => $commands['devToInstall']->all(),
+        ];
     }
 
     public function execute(Library $library): void
