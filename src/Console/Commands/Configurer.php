@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Console\Commands;
 
-use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\Dto\Options;
-use Garanaw\LaravelConfigurer\InstallerContract;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Config\Repository;
 use Illuminate\Console\Attributes\Description;
@@ -17,7 +17,6 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;

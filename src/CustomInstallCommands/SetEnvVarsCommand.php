@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
+use Garanaw\LaravelConfigurer\Contracts\CustomCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;

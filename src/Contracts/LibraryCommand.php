@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
+namespace Garanaw\LaravelConfigurer\Contracts;
 
 use Garanaw\LaravelConfigurer\Library;
 

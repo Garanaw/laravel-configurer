@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Garanaw\LaravelConfigurer\Mechanisms\Publishers;
+namespace Garanaw\LaravelConfigurer\Contracts;
 
 use Garanaw\LaravelConfigurer\Library;
 

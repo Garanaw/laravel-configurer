@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Garanaw\LaravelConfigurer;
 
 use Garanaw\LaravelConfigurer\Console\Commands\Configurer;
+use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
 use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Foundation\Console\AboutCommand;

@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer;
 
+use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
 use Garanaw\LaravelConfigurer\Dto\Options;
 use Garanaw\LaravelConfigurer\Enum\When;
-use Garanaw\LaravelConfigurer\Events\LibraryStartedInstalling;
 use Garanaw\LaravelConfigurer\Mechanisms\InstallMechanism;
 use Garanaw\LaravelConfigurer\Mechanisms\PublishMechanism;
 use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
-use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
 use Throwable;
-
-use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 
 class Installer implements InstallerContract

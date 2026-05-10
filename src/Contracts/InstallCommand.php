@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
+namespace Garanaw\LaravelConfigurer\Contracts;
 
 use Garanaw\LaravelConfigurer\Enum\When;
-use Garanaw\LaravelConfigurer\Library;
 
 interface InstallCommand
 {

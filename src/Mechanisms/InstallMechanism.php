@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Mechanisms;
 
-use Garanaw\LaravelConfigurer\CustomInstallCommands\InstallCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Events\LibraryFailedInstalling;
 use Garanaw\LaravelConfigurer\Events\LibraryInstalled;
@@ -12,7 +12,6 @@ use Garanaw\LaravelConfigurer\Exception\FailedToInstallException;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Events\Dispatcher;
 use Throwable;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 

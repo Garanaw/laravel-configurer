@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer;
 
-use Garanaw\LaravelConfigurer\CustomInstallCommands\LibraryCommand;
+use Garanaw\LaravelConfigurer\Contracts\LibraryCommand;
 use Illuminate\Support\Enumerable;
 use Illuminate\Support\Fluent;
 
