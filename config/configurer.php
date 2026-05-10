@@ -84,7 +84,7 @@ return [
         ],
         [
             'name' => 'Laravel Prompts',
-            'command' => 'laravel/prompt',
+            'command' => 'laravel/prompts',
         ],
         // Migration libraries
         [
