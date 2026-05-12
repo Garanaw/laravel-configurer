@@ -10,8 +10,12 @@ use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
+use Illuminate\Support\Enumerable;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\table;
 
 class RequirerPipe implements Pipe
 {
@@ -38,11 +42,30 @@ class RequirerPipe implements Pipe
     {
         $commands = $passable->libraries->map(static fn (Library $library) => $library->command)->all();
 
+        $this->display($passable->libraries);
+
+        if (! $passable->options->autoConfirm || ! confirm('Do you want to require these packages now?')) {
+            return;
+        }
+
         $this->composer->requirePackages(
             packages: $commands,
             output: $this->output,
         );
 
         $passable->libraries->each(static fn (Library $library) => $library->installed());
+    }
+
+    protected function display(Enumerable $libraries): void
+    {
+        info('The following libraries will be installed');
+
+        table(
+            headers: ['Library', 'Command'],
+            rows: $libraries->map(static fn (Library $library) => [
+                $library->name,
+                $library->command,
+            ])->all(),
+        );
     }
 }
