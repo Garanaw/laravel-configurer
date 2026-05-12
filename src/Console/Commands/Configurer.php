@@ -31,7 +31,8 @@ class Configurer extends Command
     protected $signature = 'configurer:run
                             {--all : Installs all libraries without selecting individually}
                             {--auto-confirm : Run all the installations selected without confirmation}
-                            {--dev : Installs all the dev libraries under the "dev" section in composer}
+                            {--dev-as-dev : Installs all the dev libraries under the "dev" section in composer without confirming}
+                            {--dev-only : Installs only the dev libraries under the "dev" section in composer}
                             {--no-publish : Skip the publish commands for the libraries}
                             {--no-install : Skip the install commands for the libraries}
                             {--no-migrate : Skip running any migrations for the libraries}
@@ -93,14 +94,7 @@ class Configurer extends Command
 
     protected function makePassable(Enumerable $libraries, Options $options): Passable
     {
-        /**
-         * @var Enumerable<Library> $dev
-         * @var Enumerable<Library> $noDev
-         */
-        [$dev, $noDev] = $libraries->partition(
-            static fn (Library $library) => ($options->devOnly && $library->canBeDevOnly)
-                || confirm(sprintf('Do you want to install %s as a dev dependency?', $library->name))
-        );
+        ['dev' => $dev, 'noDev' => $noDev] = $this->filterLibrariesByEnvironment($libraries, $options);
 
         return new Passable([
             'libraries' => $noDev,
@@ -109,12 +103,41 @@ class Configurer extends Command
         ]);
     }
 
+    protected function filterLibrariesByEnvironment(Enumerable $libraries, Options $options): array
+    {
+        if ($options->devOnly) {
+            return [
+                'dev' => $libraries->filter(static fn (Library $library) => $library->canBeDevOnly)->values(),
+                'prod' => collect([]),
+            ];
+        }
+
+        /**
+         * @var Enumerable<Library> $dev
+         * @var Enumerable<Library> $noDev
+         */
+        [$dev, $noDev] = $libraries->partition(static function (Library $library) use ($options) {
+            if (! $library->canBeDevOnly) {
+                return false;
+            }
+
+            if ($options->devAsDev) {
+                return true;
+            }
+
+            return confirm(sprintf('Do you want to install %s as a dev dependency?', $options->devAsDev));
+        });
+
+        return ['dev' => $dev, 'noDev' => $noDev];
+    }
+
     protected function makeOptions(): Options
     {
         return new Options([
             'all' => $this->option('all') ?? false,
             'autoConfirm' => $this->option('auto-confirm') ?? false,
-            'devOnly' => $this->option('dev') ?? false,
+            'devAsDev' => $this->option('dev-as-dev') ?? false,
+            'devOnly' => $this->option('dev-only') ?? false,
             'noPublish' => $this->option('no-publish') ?? false,
             'noInstall' => $this->option('no-install') ?? false,
             'noMigrate' => $this->option('no-migrate') ?? false,

@@ -9,6 +9,7 @@ use Illuminate\Support\Fluent;
 /**
  * @property-read bool $all
  * @property-read bool $autoConfirm
+ * @property-read bool $devAsDev
  * @property-read bool $devOnly
  * @property-read bool $noPublish
  * @property-read bool $noInstall
