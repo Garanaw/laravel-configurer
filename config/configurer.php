@@ -187,7 +187,7 @@ return [
         // Testing libraries
         [
             'name' => 'Pest',
-            'command' => 'pest/pest',
+            'command' => 'pestphp/pest',
             'canBeDevOnly' => true,
             'withAllDependencies' => true,
             'installCommands' => ['./vendor/pest/pest --init'],
