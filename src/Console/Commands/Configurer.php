@@ -8,7 +8,9 @@ use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\Dto\Options;
+use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
+use Garanaw\LaravelConfigurer\Pipeline\ComposerPipeline;
 use Illuminate\Config\Repository;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Command;
@@ -17,6 +19,7 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Enumerable;
 use Symfony\Component\Console\Attribute\AsCommand;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;
@@ -32,12 +35,14 @@ class Configurer extends Command
                             {--no-publish : Skip the publish commands for the libraries}
                             {--no-install : Skip the install commands for the libraries}
                             {--no-migrate : Skip running any migrations for the libraries}
-                            {--no-env : Skip setting up any environment variables for the libraries}';
+                            {--no-env : Skip setting up any environment variables for the libraries}
+                            {--no-events : Skip dispatching events for the libraries}';
 
     public function handle(
         Composer $composer,
         Config $config,
         InstallerContract $installer,
+        ComposerPipeline $pipeline,
     ): void {
         info('Running the Configurer...');
         $available = $this->collectInstallableLibraries($config, $composer);
@@ -54,9 +59,13 @@ class Configurer extends Command
 
         $toInstall = $this->prepareLibraries($available, $selected, $composer);
 
-        $result = $installer->run($toInstall, $options);
+        $passable = $this->makePassable($toInstall, $options);
 
-        info(sprintf('%s libraries have been installed.', $result->count()));
+        $result = $pipeline->pass($passable);
+
+//        $result = $installer->run($toInstall, $options);
+
+//        info(sprintf('%s libraries have been installed.', $result->count()));
 
         // Now run the custom commands
         $allCommands = $config->get('configurer.commands', []);
@@ -82,6 +91,24 @@ class Configurer extends Command
             ->filter(static fn (array $library) => $composer->hasPackage($library['command']) === false);
     }
 
+    protected function makePassable(Enumerable $libraries, Options $options): Passable
+    {
+        /**
+         * @var Enumerable<Library> $dev
+         * @var Enumerable<Library> $noDev
+         */
+        [$dev, $noDev] = $libraries->partition(
+            static fn (Library $library) => ($options->devOnly && $library->canBeDevOnly)
+                || confirm(sprintf('Do you want to install %s as a dev dependency?', $library->name))
+        );
+
+        return new Passable([
+            'libraries' => $noDev,
+            'devLibraries' => $dev,
+            'options' => $options,
+        ]);
+    }
+
     protected function makeOptions(): Options
     {
         return new Options([
@@ -91,6 +118,7 @@ class Configurer extends Command
             'noPublish' => $this->option('no-publish') ?? false,
             'noInstall' => $this->option('no-install') ?? false,
             'noMigrate' => $this->option('no-migrate') ?? false,
+            'noEvents' => $this->option('no-events') ?? false,
             'noEnv' => $this->option('no-env') ?? false,
         ]);
     }

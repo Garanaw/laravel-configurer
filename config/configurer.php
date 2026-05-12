@@ -7,6 +7,16 @@ use Garanaw\LaravelConfigurer\CustomInstallCommands\SeedableMigrationsInstall;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\SetEnvVarsCommand;
 
 return [
+
+    /**
+     * |------------------------------------------------------------------------
+     * | Libraries
+     * |------------------------------------------------------------------------
+     * | The libraries that will be installed.
+     * | You can add any library that is available on Packagist.
+     * | You can also add custom libraries by adding a new entry to the array and specifying the necessary information.
+     * |--------------------------------------------------------------------------
+     */
     'libraries' => [
         // Laravel libraries
         [
@@ -193,7 +203,35 @@ return [
         ],
     ],
 
-    // Custom Commands
+    /**
+     * |------------------------------------------------------------------------
+     * | Custom Pipes
+     * |------------------------------------------------------------------------
+     * | - Custom pipes that will be executed during the installation process.
+     * | - These pipes will run at the end of the default pipelines, and will receive the same passable as the default pipes.
+     * | - You can add any custom pipe that implements the Pipe interface.
+     * | - The pipes will be executed in the order they are defined in the array.
+     * | - You can use this feature to add any custom logic that you want to run during the installation process,
+     * |    such as installing additional libraries, running custom commands, etc.
+     * | - Make sure that the return is the same passable as it will be used later
+     * | - The pipes will be resolved, so you can use DI. However you must specify here the class names
+     * |--------------------------------------------------------------------------
+     */
+    'customPipes' => [],
+
+    /**
+     * |------------------------------------------------------------------------
+     * | Custom Commands
+     * |------------------------------------------------------------------------
+     * | - Custom commands that will be executed after the installation of the libraries.
+     * | - These commands will receive the result of the installation process, which is the same passable as the previous pipes.
+     * | - You can add any custom command that implements the CustomCommand interface.
+     * | - The commands will be executed in the order they are defined in the array.
+     * | - You can use this feature to add any custom logic that you want to run after the installation process, such as running migrations, setting environment variables, etc.
+     * | - Make sure that the commands are idempotent.
+     * | - The commands will be run sequentially, and the next command will only run if the previous command was successful.
+     * |------------------------------------------------------------------------
+     */
     'customCommands' => [
         MigrateCommand::class,
         SetEnvVarsCommand::class,

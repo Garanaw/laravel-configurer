@@ -10,6 +10,8 @@ enum When
     case START;
     // Runs the configuration command at the end of the library installation. Most of the commands will use this option
     case END;
+    // Runs the configuration command at some point after running the migrations (some libraries require this)
+    case AFTER_MIGRATION;
     // Runs the configuration command at the end of the installation of all libraries.
     case END_ALL;
 

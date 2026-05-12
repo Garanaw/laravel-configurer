@@ -13,6 +13,7 @@ use Illuminate\Support\Fluent;
  * @property-read bool $noPublish
  * @property-read bool $noInstall
  * @property-read bool $noMigrate
+ * @property-read bool $noEvents
  * @property-read bool $noEnv
  */
 class Options extends Fluent
