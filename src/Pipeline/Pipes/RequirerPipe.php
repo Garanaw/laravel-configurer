@@ -28,7 +28,11 @@ class RequirerPipe implements Pipe
     public function handle(Passable $passable, \Closure $next): Passable
     {
         try {
-            $this->execute($passable);
+            $installed = $this->execute($passable);
+
+            if (! $installed) {
+                return $passable;
+            }
         } catch (\Throwable $e) {
             error(sprintf('Failed to require packages: %s', $e->getMessage()));
 
@@ -38,14 +42,14 @@ class RequirerPipe implements Pipe
         return $next($passable);
     }
 
-    protected function execute(Passable $passable): void
+    protected function execute(Passable $passable): bool
     {
         $commands = $passable->libraries->map(static fn (Library $library) => $library->command)->all();
 
         $this->display($passable->libraries);
 
         if (! $passable->options->autoConfirm || ! confirm('Do you want to require these packages now?')) {
-            return;
+            return false;
         }
 
         $this->composer->requirePackages(
@@ -54,6 +58,8 @@ class RequirerPipe implements Pipe
         );
 
         $passable->libraries->each(static fn (Library $library) => $library->installed());
+
+        return true;
     }
 
     protected function display(Enumerable $libraries): void
