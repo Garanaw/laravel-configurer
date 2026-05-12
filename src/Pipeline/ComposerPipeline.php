@@ -51,7 +51,13 @@ class ComposerPipeline extends Pipeline
         }
 
         return array_map(
-            static fn (array $class) => resolve($class['class'], ...($class['params'] ?? [])),
+            static function (array $class) {
+                try {
+                    return resolve($class['class'], ...($class['params'] ?? []));
+                } catch (\Throwable $e) {
+                    dd($class);
+                }
+            },
             $pipes,
         );
     }
