@@ -55,7 +55,11 @@ class ComposerPipeline extends Pipeline
                 try {
                     return resolve($class['class'], ...($class['params'] ?? []));
                 } catch (\Throwable $e) {
-                    dd($class);
+                    dd([
+                        'class' => $class['class'],
+                        'params' => $class['params'] ?? [],
+                        'error' => $e->getMessage(),
+                    ]);
                 }
             },
             $pipes,
