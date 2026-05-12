@@ -125,7 +125,7 @@ class Configurer extends Command
                 return true;
             }
 
-            return confirm(sprintf('Do you want to install %s as a dev dependency?', $options->devAsDev));
+            return confirm(sprintf('Do you want to install %s as a dev dependency?', $library->name));
         });
 
         return ['dev' => $dev, 'noDev' => $noDev];
