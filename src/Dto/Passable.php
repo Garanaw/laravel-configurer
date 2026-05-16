@@ -66,4 +66,9 @@ class Passable extends Fluent
     {
         return $this->options->noEnv;
     }
+
+    public function isVerbose(): bool
+    {
+        return $this->options->isVerbose();
+    }
 }
