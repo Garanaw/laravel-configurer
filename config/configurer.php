@@ -88,7 +88,7 @@ return [
             'command' => 'laravel/ai',
             'needsMigrating' => true,
             'publishCommands' => [
-                'provider' => 'Laravel\Pint\PintServiceProvider',
+                'provider' => 'Laravel\Ai\AiServiceProvider',
             ],
         ],
         [
