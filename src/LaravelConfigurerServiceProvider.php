@@ -6,6 +6,8 @@ namespace Garanaw\LaravelConfigurer;
 
 use Garanaw\LaravelConfigurer\Console\Commands\Configurer;
 use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
+use Garanaw\LaravelConfigurer\Mechanisms\Publishers\CommandPublisher;
+use Garanaw\LaravelConfigurer\Mechanisms\Publishers\ProviderPublisher;
 use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\DevRequirerPipe;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\RequirerPipe;
@@ -28,18 +30,21 @@ class LaravelConfigurerServiceProvider extends ServiceProvider
             ->needs(Composer::class)
             ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
 
-        $this->app->when(Installer::class)
-            ->needs(Composer::class)
-            ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
-
-        $this->app->when(RequireMechanism::class)
+        $this->app->when([
+            Installer::class,
+            RequireMechanism::class,
+        ])
             ->needs(Composer::class)
             ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
 
         $this->app->when([
             RequireMechanism::class,
+            // Pipes
             RequirerPipe::class,
             DevRequirerPipe::class,
+            // Commands
+            ProviderPublisher::class,
+            CommandPublisher::class,
         ])
             ->needs(OutputStyle::class)
             ->give(static fn ($app) => resolve(OutputStyle::class, [

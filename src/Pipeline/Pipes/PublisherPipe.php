@@ -37,6 +37,10 @@ class PublisherPipe implements Pipe
 
     public function execute(Passable $passable): void
     {
+        if ($passable->shouldPublish() === false) {
+            return;
+        }
+
         $libraries = $passable->allLibraries()->filter(
             static fn (Library $library) => $library->hasPublishCommands()
         );

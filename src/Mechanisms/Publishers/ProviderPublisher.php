@@ -6,20 +6,21 @@ namespace Garanaw\LaravelConfigurer\Mechanisms\Publishers;
 
 use Garanaw\LaravelConfigurer\Contracts\PublisherContract;
 use Garanaw\LaravelConfigurer\Library;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Kernel;
 
 class ProviderPublisher implements PublisherContract
 {
     public function __construct(
         private readonly Kernel $artisan,
+        private readonly OutputStyle $output,
     ) {}
 
     public function publish(Library $library): void
     {
         $command = $this->buildCommand($library);
-        $output = prompts_output(...);
 
-        $this->artisan->call($command, outputBuffer: $output);
+        $this->artisan->call($command, outputBuffer: $this->output);
     }
 
     protected function buildCommand(Library $library): string

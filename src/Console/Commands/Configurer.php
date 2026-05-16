@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Garanaw\LaravelConfigurer\Console\Commands;
 
 use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
-use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\StringCommand;
 use Garanaw\LaravelConfigurer\Dto\Options;
 use Garanaw\LaravelConfigurer\Dto\Passable;
@@ -43,7 +42,6 @@ class Configurer extends Command
     public function handle(
         Composer $composer,
         Config $config,
-        InstallerContract $installer,
         ComposerPipeline $pipeline,
     ): void {
         info('Running the Configurer...');
