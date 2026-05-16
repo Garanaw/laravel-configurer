@@ -48,8 +48,10 @@ class InstallerPipe implements Pipe
             }
 
             foreach ($commands as $command) {
-                if (! $passable->options->autoConfirm || ! confirm(sprintf('Do you want to run %s for %s now?', $command->command(), $library->name))) {
-                    continue;
+                if (! $passable->options->shouldAutoConfirm()) {
+                    if (! confirm(sprintf('Do you want to run %s for %s now?', $command->command(), $library->name))) {
+                        continue;
+                    }
                 }
 
                 $command->install($library);
