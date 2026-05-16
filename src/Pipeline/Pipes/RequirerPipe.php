@@ -48,7 +48,7 @@ class RequirerPipe implements Pipe
 
         $this->display($passable->libraries);
 
-        if (! $passable->options->autoConfirm || ! confirm('Do you want to require these packages now?')) {
+        if (! $passable->options->shouldAutoConfirm() || ! confirm('Do you want to require these packages now?')) {
             return false;
         }
 

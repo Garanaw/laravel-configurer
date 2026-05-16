@@ -23,6 +23,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\table;
 
 #[AsCommand('configurer:run')]
 #[Description('Pre-configures the application with some useful libraries and settings')]
@@ -63,6 +64,16 @@ class Configurer extends Command
         $passable = $this->makePassable($toInstall, $options);
 
         $result = $pipeline->pass($passable);
+
+        table(
+            headers: ['Library', 'Required', 'Published', 'Installed'],
+            rows: $result->map(static fn (Library $library) => [
+                'library' => $library->name,
+                'required' => $library->isRequired() ? 'Yes' : 'No',
+                'published' => $library->isPublished() ? 'Yes' : 'No',
+                'installed' => $library->isInstalled() ? 'Yes' : 'No',
+            ])->all(),
+        );
 
 //        $result = $installer->run($toInstall, $options);
 
