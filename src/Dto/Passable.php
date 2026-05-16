@@ -22,6 +22,11 @@ class Passable extends Fluent
         return $this->devLibraries->isNotEmpty();
     }
 
+    public function allLibraries(): Enumerable
+    {
+        return $this->libraries->merge($this->devLibraries);
+    }
+
     public function hasCommands(): bool
     {
         return $this->commands->isNotEmpty();

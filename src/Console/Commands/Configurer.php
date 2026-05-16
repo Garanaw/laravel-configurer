@@ -63,11 +63,12 @@ class Configurer extends Command
 
         $passable = $this->makePassable($toInstall, $options);
 
+        /** @var Passable $result */
         $result = $pipeline->pass($passable);
 
         table(
             headers: ['Library', 'Required', 'Published', 'Installed'],
-            rows: $result->map(static fn (Library $library) => [
+            rows: $result->allLibraries()->map(static fn (Library $library) => [
                 'library' => $library->name,
                 'required' => $library->isRequired() ? 'Yes' : 'No',
                 'published' => $library->isPublished() ? 'Yes' : 'No',

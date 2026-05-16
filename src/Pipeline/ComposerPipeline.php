@@ -12,7 +12,7 @@ use function Laravel\Prompts\info;
 
 class ComposerPipeline extends Pipeline
 {
-    public function pass(Passable $passable): mixed
+    public function pass(Passable $passable): Passable
     {
         return $this
             ->send($passable)
