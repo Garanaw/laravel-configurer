@@ -18,16 +18,12 @@ class ProviderPublisher implements PublisherContract
 
     public function publish(Library $library): void
     {
-        $command = $this->buildCommand($library);
+        $params = ['--provider' => $library->publishCommands['provider']];
 
-        $this->artisan->call($command, outputBuffer: $this->output);
-    }
-
-    protected function buildCommand(Library $library): string
-    {
-        /** @var class-string $provider */
-        $provider = $library->publishCommands['provider'];
-
-        return sprintf('vendor:publish --provider="%s"', $provider);
+        $this->artisan->call(
+            command: 'vendor:publish',
+            parameters: $params,
+            outputBuffer: $this->output,
+        );
     }
 }
