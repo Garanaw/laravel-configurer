@@ -8,9 +8,12 @@ use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\PublisherManager;
+use Illuminate\Support\Enumerable;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\table;
 
 class PublisherPipe implements Pipe
 {
@@ -34,14 +37,20 @@ class PublisherPipe implements Pipe
 
     public function execute(Passable $passable): void
     {
-        $libraries = $passable->libraries
-            ->filter(static fn (Library $library) => $library->hasPublishCommands())
-            ->merge($passable->devLibraries->filter(static fn (Library $library) => $library->hasPublishCommands()));
+        $libraries = $passable->allLibraries()->filter(
+            static fn (Library $library) => $library->hasPublishCommands()
+        );
+
+        if ($passable->isVerbose()) {
+            $this->display($libraries);
+        }
 
         /** @var Library $library */
         foreach ($libraries as $library) {
-            if (! $passable->options->autoConfirm && ! confirm(sprintf('Do you want to publish the assets for %s?', $library->name))) {
-                continue;
+            if (! $passable->options->shouldAutoConfirm()) {
+                if (! confirm(sprintf('Do you want to publish the assets for %s?', $library->name))) {
+                    continue;
+                }
             }
 
             $driver = $this->publisher->driver($library);
@@ -50,5 +59,18 @@ class PublisherPipe implements Pipe
 
             $library->published();
         }
+    }
+
+    protected function display(Enumerable $libraries): void
+    {
+        info('The following libraries contain asserts to publish:');
+
+        table(
+            headers: ['Library', 'Publish Commands'],
+            rows: $libraries->map(static fn (Library $library) => [
+                $library->name,
+                $library->publishCommands()->join(', '),
+            ])->all(),
+        );
     }
 }

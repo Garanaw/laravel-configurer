@@ -11,7 +11,10 @@ use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
 
+use Illuminate\Support\Enumerable;
 use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\table;
 
 class DevRequirerPipe implements Pipe
 {
@@ -38,6 +41,10 @@ class DevRequirerPipe implements Pipe
     {
         $commands = $passable->devLibraries->map(static fn (Library $library) => $library->command)->all();
 
+        if ($passable->isVerbose()) {
+            $this->display($passable->devLibraries);
+        }
+
         $this->composer->requirePackages(
             packages: $commands,
             dev: true,
@@ -45,5 +52,18 @@ class DevRequirerPipe implements Pipe
         );
 
         $passable->devLibraries->each(static fn (Library $library) => $library->required());
+    }
+
+    protected function display(Enumerable $libraries): void
+    {
+        info('The following libraries will be installed as Dev dependencies:');
+
+        table(
+            headers: ['Library', 'Command'],
+            rows: $libraries->map(static fn (Library $library) => [
+                $library->name,
+                $library->command,
+            ])->all(),
+        );
     }
 }

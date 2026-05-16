@@ -15,7 +15,6 @@ use Illuminate\Support\Fluent;
  * @property-read ?list<string> $publishCommands
  * @property-read ?bool $needsMigrating
  * @property-read bool $canBeDevOnly
- * @property-read ?array{?provider: string, ?tags: list<string>} $publishCommands
  * @property-read ?array $envVars
  * @property bool $required
  * @property bool $published
@@ -84,6 +83,11 @@ class Library extends Fluent
     public function hasPublishCommands(): bool
     {
         return $this->publishCommands !== null;
+    }
+
+    public function publishCommands(): Enumerable
+    {
+        return $this->collect('publishCommands');
     }
 
     public function hasEnvVars(): bool
