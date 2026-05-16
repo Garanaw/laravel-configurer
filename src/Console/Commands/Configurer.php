@@ -37,8 +37,7 @@ class Configurer extends Command
                             {--no-install : Skip the install commands for the libraries}
                             {--no-migrate : Skip running any migrations for the libraries}
                             {--no-env : Skip setting up any environment variables for the libraries}
-                            {--no-events : Skip dispatching events for the libraries}
-                            {--verbose : Displays extra information}';
+                            {--no-events : Skip dispatching events for the libraries}';
 
     public function handle(
         Composer $composer,
