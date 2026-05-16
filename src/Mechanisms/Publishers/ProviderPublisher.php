@@ -7,18 +7,28 @@ namespace Garanaw\LaravelConfigurer\Mechanisms\Publishers;
 use Garanaw\LaravelConfigurer\Contracts\PublisherContract;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Console\OutputStyle;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Console\Kernel;
 
 class ProviderPublisher implements PublisherContract
 {
     public function __construct(
+        private readonly Application $app,
         private readonly Kernel $artisan,
         private readonly OutputStyle $output,
     ) {}
 
     public function publish(Library $library): void
     {
-        $params = ['--provider' => $library->publishCommands['provider']];
+        $provider = $library->publishCommands['provider'] ?? null;
+
+        if (! $provider) {
+            return;
+        }
+
+        $this->app->register($provider, force: true);
+
+        $params = ['--provider' => $provider];
 
         $this->artisan->call(
             command: 'vendor:publish',

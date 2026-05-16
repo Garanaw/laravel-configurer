@@ -8,6 +8,8 @@ use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\PublisherManager;
+use Illuminate\Contracts\Console\Application;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Enumerable;
 
 use function Laravel\Prompts\confirm;
