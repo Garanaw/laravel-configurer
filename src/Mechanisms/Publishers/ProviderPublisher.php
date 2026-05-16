@@ -22,7 +22,7 @@ class ProviderPublisher implements PublisherContract
 
         $this->artisan->call(
             command: 'vendor:publish',
-            parameters: $params,
+//            parameters: $params,
             outputBuffer: $this->output,
         );
     }
