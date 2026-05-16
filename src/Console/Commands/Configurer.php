@@ -50,9 +50,6 @@ class Configurer extends Command
         $available = $this->collectInstallableLibraries($config, $composer);
         $options = $this->makeOptions();
 
-        dump($options->all());
-        return;
-
         $availableSelection = $available->pluck('name')->toArray();
 
         $selected = $options->all ? $availableSelection : multiselect(
