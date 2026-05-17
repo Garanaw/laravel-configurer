@@ -7,6 +7,7 @@ namespace Garanaw\LaravelConfigurer\Pipeline;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Illuminate\Pipeline\Pipeline;
 
+use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;
 
 class ComposerPipeline extends Pipeline
@@ -63,11 +64,11 @@ class ComposerPipeline extends Pipeline
 
     private function display(array $pipes): void
     {
-        $classes = array_map(static fn (array $pipe) => class_basename($pipe['class']), $pipes);
+        info('The following pipes will be executed:');
 
         table(
             headers: ['Pipes'],
-            rows: $classes,
+            rows: array_map(static fn (array $pipe) => class_basename($pipe['class']), $pipes),
         );
     }
 }

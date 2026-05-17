@@ -61,6 +61,8 @@ class Configurer extends Command
 
         $passable = $this->makePassable($toInstall, $options);
 
+        info('All prepared, sending Passable to the pipeline...');
+
         /** @var Passable $result */
         $result = $pipeline->pass($passable);
 
@@ -71,7 +73,7 @@ class Configurer extends Command
                 'required' => $library->isRequired() ? 'Yes' : 'No',
                 'published' => $library->isPublished() ? 'Yes' : 'No',
                 'installed' => $library->isInstalled() ? 'Yes' : 'No',
-            ])->all(),
+            ])->all() ?? [],
         );
 
 //        $result = $installer->run($toInstall, $options);
