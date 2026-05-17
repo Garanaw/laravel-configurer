@@ -18,6 +18,11 @@ class MigrateCommand implements InstallCommand
 
     public function __construct(private readonly Kernel $kernel) {}
 
+    public function id(): string
+    {
+        return 'internal:migrate';
+    }
+
     public function when(): When
     {
         return When::END_ALL;
@@ -31,7 +36,7 @@ class MigrateCommand implements InstallCommand
     public function dependsOn(): ?array
     {
         return [
-            SeedableMigrationsInstall::class,
+            SeedableMigrationsInstall::makeIdForDep(),
         ];
     }
 

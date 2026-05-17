@@ -15,31 +15,38 @@ class KhanSort
     {
         $graph = [];
         $inDegree = [];
+        $map = [];
 
+        // 1. Index
         foreach ($commands as $command) {
-            $id = $command->command();
+            $id = $command->id();
 
+            if (isset($map[$id])) {
+                throw new RuntimeException("ID duplicado detectado: {$id}");
+            }
+
+            $map[$id] = $command;
             $graph[$id] = [];
             $inDegree[$id] = 0;
         }
 
-        // Make graph
+        // 2. Build graph
         foreach ($commands as $command) {
-            $id = $command->command();
-            $dependencies = $command->dependsOn() ?? [];
+            $id = $command->id();
 
-            foreach ($dependencies as $dep) {
-                if (!isset($graph[$dep])) {
-                    throw new RuntimeException("Dependency not found: {$dep}");
+            foreach ($command->dependsOn() as $depId) {
+                if (!isset($graph[$depId])) {
+                    throw new RuntimeException(
+                        "Dependencia no encontrada: {$depId} requerida por {$id}"
+                    );
                 }
 
-                // dep -> id
-                $graph[$dep][] = $id;
+                $graph[$depId][] = $id;
                 $inDegree[$id]++;
             }
         }
 
-        // Initial queue without dependencies
+        // 3. Init queue
         $queue = [];
 
         foreach ($inDegree as $id => $degree) {
@@ -50,6 +57,7 @@ class KhanSort
 
         $sorted = [];
 
+        // 4. Kahn
         while (!empty($queue)) {
             $current = array_shift($queue);
             $sorted[] = $current;
@@ -63,17 +71,16 @@ class KhanSort
             }
         }
 
-        // Detect cycles
+        // 5. Detect cycles
         if (count($sorted) !== count($commands)) {
-            throw new RuntimeException('Dependencias circulares detectadas');
+            $remaining = array_diff(array_keys($map), $sorted);
+
+            throw new RuntimeException(
+                'Dependencias circulares detectadas: ' . implode(', ', $remaining)
+            );
         }
 
-        // Map to instances
-        $map = [];
-        foreach ($commands as $command) {
-            $map[$command->command()] = $command;
-        }
-
+        // 6. Map result
         return collect($sorted)->map(static fn ($id) => $map[$id]);
     }
 }

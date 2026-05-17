@@ -14,6 +14,11 @@ class SetEnvVarsCommand implements InstallCommand
 {
     use CanRun;
 
+    public function id(): string
+    {
+        return 'internal:set-env-vars';
+    }
+
     public function install(Passable $passable): bool
     {
         $envVars = $passable->allLibraries()

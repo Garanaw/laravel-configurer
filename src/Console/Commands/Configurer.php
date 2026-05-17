@@ -81,21 +81,21 @@ class Configurer extends Command
 //        info(sprintf('%s libraries have been installed.', $result->count()));
 
         // Now run the custom commands
-        $allCommands = $config->get('configurer.commands', []);
-
-        foreach ($allCommands as $command) {
-            $command = $this->mapCommand($command);
-
-            if (! confirm(sprintf('Do you want to run the command %s now?', $command->command()))) {
-                continue;
-            }
-
-            try {
-                $command->install($result);
-            } catch (\Throwable $e) {
-                info(sprintf('Failed to run command %s: %s', $command->command(), $e->getMessage()));
-            }
-        }
+//        $allCommands = $config->get('configurer.commands', []);
+//
+//        foreach ($allCommands as $command) {
+//            $command = $this->mapCommand($command);
+//
+//            if (! confirm(sprintf('Do you want to run the command %s now?', $command->command()))) {
+//                continue;
+//            }
+//
+//            try {
+//                $command->install($result);
+//            } catch (\Throwable $e) {
+//                info(sprintf('Failed to run command %s: %s', $command->command(), $e->getMessage()));
+//            }
+//        }
     }
 
     protected function collectInstallableLibraries(Repository $config, Composer $composer): Enumerable

@@ -19,6 +19,11 @@ class StringCommand implements InstallCommand
         private readonly string $command,
     ) {}
 
+    public function id(): string
+    {
+        return sprintf('lib:%s', $this->command);
+    }
+
     public function when(): When
     {
         return When::END;

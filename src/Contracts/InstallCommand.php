@@ -9,6 +9,8 @@ use Garanaw\LaravelConfigurer\Enum\When;
 
 interface InstallCommand
 {
+    public function id(): string;
+
     public function setRan(bool $ran = true): static;
 
     public function didRun(): bool;
