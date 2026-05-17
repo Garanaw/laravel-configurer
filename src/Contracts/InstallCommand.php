@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Contracts;
 
+use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
 
 interface InstallCommand
@@ -17,4 +18,6 @@ interface InstallCommand
     public function command(): string;
 
     public function dependsOn(): ?array;
+
+    public function install(Passable $passable): bool;
 }

@@ -47,7 +47,7 @@ return [
             'installCommands' => ['pulse:install'],
             'needsMigrating' => true,
             'publishCommands' => [
-                'provider' => 'Laravel\Pulse\PulseServiceProvider',
+                'provider' => Laravel\Pulse\PulseServiceProvider::class,
                 'tags' => [
                     'pulse-config',
                 ],
@@ -74,7 +74,7 @@ return [
             'name' => 'Laravel Pennant',
             'command' => 'laravel/pennant',
             'publishCommands' => [
-                'provider' => 'Laravel\Pennant\PennantServiceProvider',
+                'provider' => Laravel\Pennant\PennantServiceProvider::class,
             ],
             'needsMigrating' => true,
         ],
@@ -100,7 +100,7 @@ return [
             'name' => 'Seedable Migrations',
             'command' => 'garanaw/seedable-migrations',
             'publishCommands' => [
-                'provider' => 'Garanaw\SeedableMigrations\SeedableMigrationsServiceProvider',
+                'provider' => Garanaw\SeedableMigrations\SeedableMigrationsServiceProvider::class,
             ],
             'installCommands' => [
                 SeedableMigrationsInstall::class,
@@ -117,7 +117,7 @@ return [
             'command' => 'spatie/laravel-medialibrary',
             'needsMigrating' => true,
             'publishCommands' => [
-                'provider' => 'Spatie\MediaLibrary\MediaLibraryServiceProvider',
+                'provider' => Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
                 'tags' => [
                     'medialibrary-migrations',
                     'medialibrary-config',
@@ -128,7 +128,7 @@ return [
             'name' => 'Spatie Laravel Tags',
             'command' => 'spatie/laravel-tags',
             'publishCommands' => [
-                'provider' => 'Spatie\Tags\TagsServiceProvider',
+                'provider' => Spatie\Tags\TagsServiceProvider::class,
                 'tags' => [
                     'tags-migrations',
                     'tags-config',
@@ -141,7 +141,7 @@ return [
             'command' => 'spatie/laravel-web-tinker',
             'canBeDevOnly' => true,
             'publishCommands' => [
-                'provider' => 'Spatie\WebTinker\WebTinkerServiceProvider',
+                'provider' => Spatie\WebTinker\WebTinkerServiceProvider::class,
                 'tags' => ['config'],
             ],
         ],

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Garanaw\LaravelConfigurer;
 
 use Garanaw\LaravelConfigurer\Console\Commands\Configurer;
-use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
+//use Garanaw\LaravelConfigurer\Contracts\InstallerContract;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\CommandPublisher;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\ProviderPublisher;
-use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
+//use Garanaw\LaravelConfigurer\Mechanisms\RequireMechanism;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\DevRequirerPipe;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\RequirerPipe;
 use Illuminate\Console\OutputStyle;
@@ -24,21 +24,21 @@ class LaravelConfigurerServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/configurer.php', 'configurer');
 
-        $this->app->bind(InstallerContract::class, Installer::class);
+//        $this->app->bind(InstallerContract::class, Installer::class);
 
         $this->app->when([Configurer::class, 'handle'])
             ->needs(Composer::class)
             ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
 
-        $this->app->when([
-            Installer::class,
-            RequireMechanism::class,
-        ])
-            ->needs(Composer::class)
-            ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
+//        $this->app->when([
+//            Installer::class,
+//            RequireMechanism::class,
+//        ])
+//            ->needs(Composer::class)
+//            ->give(static fn ($app) => new Composer($app['files'], $app->basePath()));
 
         $this->app->when([
-            RequireMechanism::class,
+//            RequireMechanism::class,
             // Pipes
             RequirerPipe::class,
             DevRequirerPipe::class,

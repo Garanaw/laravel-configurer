@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
-use Garanaw\LaravelConfigurer\Contracts\CustomCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
+use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;
-use Illuminate\Support\Enumerable;
 
-class SetEnvVarsCommand implements CustomCommand
+class SetEnvVarsCommand implements InstallCommand
 {
     use CanRun;
 
-    public function install(Enumerable $libraries): bool
+    public function install(Passable $passable): bool
     {
-        $envVars = $libraries
+        $envVars = $passable->allLibraries()
             ->filter(static fn (Library $library) => $library->hasEnvVars())
             ->map(static fn (Library $library) => $library->envVars);
 

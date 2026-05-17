@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer;
 
-use Garanaw\LaravelConfigurer\Contracts\LibraryCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Illuminate\Support\Enumerable;
 use Illuminate\Support\Fluent;
 
 /**
  * @property-read string $name
  * @property-read string $command
- * @property-read Enumerable<LibraryCommand> $installCommands
+ * @property-read Enumerable<InstallCommand> $installCommands
  * @property-read ?list<string> $publishCommands
  * @property-read ?bool $needsMigrating
  * @property-read bool $canBeDevOnly
@@ -67,7 +67,14 @@ class Library extends Fluent
 
     public function isInstalled(): bool
     {
-        return $this->installed;
+        if (! $this->hasInstallCommands()) {
+            // No need for installation
+            return true;
+        }
+
+        return $this->installCommands->every(
+            static fn (InstallCommand $command) => $command->didRun()
+        );
     }
 
     public function installed(): void

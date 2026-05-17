@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
-use Garanaw\LaravelConfigurer\Contracts\CustomCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
+use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Enumerable;
 
-class MigrateCommand implements CustomCommand
+class MigrateCommand implements InstallCommand
 {
     use CanRun;
 
@@ -34,13 +35,13 @@ class MigrateCommand implements CustomCommand
         ];
     }
 
-    public function install(Enumerable $libraries): bool
+    public function install(Passable $passable): bool
     {
         if ($this->didRun()) {
             return true;
         }
 
-        if ($this->hasMissingDependencies($libraries)) {
+        if ($this->hasMissingDependencies($passable->alLibraries())) {
             return false;
         }
 

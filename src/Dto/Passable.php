@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\Dto;
 
-use Garanaw\LaravelConfigurer\Contracts\CustomCommand;
+use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Support\Enumerable;
 use Illuminate\Support\Fluent;
@@ -12,7 +12,7 @@ use Illuminate\Support\Fluent;
 /**
  * @property-read Enumerable<Library> $libraries
  * @property-read Enumerable<Library> $devLibraries
- * @property-read Enumerable<CustomCommand> $commands
+ * @property-read Enumerable<InstallCommand> $commands
  * @property-read Options $options
  */
 class Passable extends Fluent

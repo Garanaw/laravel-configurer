@@ -35,18 +35,18 @@ class ComposerPipeline extends Pipeline
         }
 
         if ($passable->shouldInstall()) {
-            $pipes[] = ['class' => Pipes\InstallerPipe::class, 'params' => ['when' => When::END]];
+            $pipes[] = ['class' => Pipes\InstallerPipe::class];
         }
 
-        if ($passable->shouldMigrate()) {
-            $pipes[] = ['class' => Pipes\MigratorPipe::class];
-        }
-
-        if ($passable->shouldInstall()) {
-            $pipes[] = ['class' => Pipes\InstallerPipe::class, 'params' => ['when' => When::END_ALL]];
-        }
-
-        $pipes[] = ['class' => Pipes\CustomCommandsPipe::class];
+//        if ($passable->shouldMigrate()) {
+//            $pipes[] = ['class' => Pipes\MigratorPipe::class];
+//        }
+//
+//        if ($passable->shouldInstall()) {
+//            $pipes[] = ['class' => Pipes\InstallerPipe::class];
+//        }
+//
+//        $pipes[] = ['class' => Pipes\CustomCommandsPipe::class];
 
         if ($customPipes = config('configurer.customPipes')) {
             $pipes = array_merge($pipes, $customPipes);

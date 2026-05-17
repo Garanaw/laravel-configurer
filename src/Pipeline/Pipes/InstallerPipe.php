@@ -9,12 +9,17 @@ use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;
+use Garanaw\LaravelConfigurer\Mechanisms\KhanSort;
+use Illuminate\Support\Enumerable;
+
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\table;
 
 class InstallerPipe implements Pipe
 {
     public function __construct(
-        private readonly When $when,
+        private readonly KhanSort $sort,
     ) {
     }
 
@@ -31,33 +36,55 @@ class InstallerPipe implements Pipe
 
     protected function execute(Passable $passable): void
     {
-        $libraries = $passable->libraries->merge($passable->devLibraries);
+        $libraries = $passable->allLibraries();
+        $commands = $this->getCommands($libraries);
 
-        /** @var Library $library */
-        foreach ($libraries as $library) {
-            if (! $library->hasInstallCommands() || $library->isInstalled()) {
-                continue;
-            }
-
-            $commands = $library->installCommands->filter(
-                fn (InstallCommand $command) => $command->when()->is($this->when)
-            );
-
-            if ($commands->isEmpty()) {
-                continue;
-            }
-
-            foreach ($commands as $command) {
-                if (! $passable->options->shouldAutoConfirm()) {
-                    if (! confirm(sprintf('Do you want to run %s for %s now?', $command->command(), $library->name))) {
-                        continue;
-                    }
-                }
-
-                $command->install($library);
-            }
-
-            $library->installed();
+        if ($passable->options->isVerbose()) {
+            $this->display($commands);
         }
+
+        foreach ($commands as $command) {
+            if (! $passable->options->shouldAutoConfirm()) {
+                if (! confirm(sprintf('Do you want to run %s now?', $command->command()))) {
+                    continue;
+                }
+            }
+
+            try {
+                $installed = $command->install($passable);
+            } catch (\Throwable $e) {
+                error(sprintf('Failed to run %s: %s', $command->command(), $e->getMessage()));
+
+                continue;
+            }
+
+            $command->setRan($installed);
+        }
+    }
+
+    /**
+     * @param Enumerable<Library> $libraries
+     * @return Enumerable<InstallCommand>
+     */
+    protected function getCommands(Enumerable $libraries): Enumerable
+    {
+        $commands = $libraries
+            ->filter(static fn (Library $library): bool => $library->hasInstallCommands())
+            ->flatMap(static fn (Library $library) => $library->installCommands)
+            ->merge(config('configurer.customCommands', []))
+            ->filter();
+
+        return $this->sort->sort($commands);
+    }
+
+    protected function display(Enumerable $commands): void
+    {
+        table(
+            headers: ['Command', 'Dependencies'],
+            rows: $commands->map(static fn (InstallCommand $command) => [
+                $command->command(),
+                implode(', ', $command->dependsOn() ?? []),
+            ])->all(),
+        );
     }
 }

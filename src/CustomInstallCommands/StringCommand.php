@@ -6,8 +6,8 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
 use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
+use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
-use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Console\Kernel;
 
 class StringCommand implements InstallCommand
@@ -34,7 +34,7 @@ class StringCommand implements InstallCommand
         return null;
     }
 
-    public function install(Library $library): bool
+    public function install(Passable $passable): bool
     {
         $this->artisan->call($this->command);
 

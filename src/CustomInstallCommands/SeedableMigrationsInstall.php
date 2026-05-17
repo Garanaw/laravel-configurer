@@ -6,8 +6,8 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
 use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
+use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
-use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemManager;
 
@@ -47,7 +47,7 @@ class SeedableMigrationsInstall implements InstallCommand
         return null;
     }
 
-    public function install(Library $library): bool
+    public function install(Passable $passable): bool
     {
         $path = resolve(Application::class)->databasePath('migrations');
 
