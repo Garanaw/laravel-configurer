@@ -61,7 +61,7 @@ class RequirerPipe implements Pipe
             output: $this->output,
         );
 
-        $passable->libraries->each(static fn (Library $library) => $library->installed());
+        $passable->libraries->each(static fn (Library $library) => $library->required());
 
         return true;
     }

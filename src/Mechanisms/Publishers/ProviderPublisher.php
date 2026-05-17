@@ -9,6 +9,7 @@ use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Console\Kernel;
+use function Laravel\Prompts\alert;
 
 class ProviderPublisher implements PublisherContract
 {
@@ -26,13 +27,19 @@ class ProviderPublisher implements PublisherContract
             return;
         }
 
+        if (! class_exists($provider)) {
+            alert(sprintf('The provider class %s does not exist. Skipping publishing for %s.', $provider, $library->name));
+
+            return;
+        }
+
         $this->app->register($provider, force: true);
 
         $params = ['--provider' => $provider];
 
         $this->artisan->call(
             command: 'vendor:publish',
-//            parameters: $params,
+            parameters: $params,
             outputBuffer: $this->output,
         );
     }
