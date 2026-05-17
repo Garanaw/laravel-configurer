@@ -79,12 +79,29 @@ class InstallerPipe implements Pipe
      */
     protected function getCommands(Enumerable $libraries, Passable $passable): Enumerable
     {
-        $commands = $libraries
-            ->filter(static fn (Library $library): bool => $library->hasInstallCommands())
-            ->flatMap(static fn (Library $library) => $library->installCommands)
-            ->merge(config('configurer.customCommands', []))
-            ->filter()
-            ->map(static fn (string $item) => resolve($item));
+        $commands = [];
+
+        foreach ($libraries as $library) {
+            if (! $library->hasInstallCommands()) {
+                continue;
+            }
+
+            foreach ($library->installCommands as $command) {
+                $commands[] = resolve($command);
+            }
+        }
+
+        foreach (config('configurer.customCommands', []) as $command) {
+            $commands[] = resolve($command);
+        }
+
+//        $commands = $libraries
+//            ->filter(static fn (Library $library): bool => $library->hasInstallCommands())
+//            ->flatMap(static fn (Library $library) => $library->installCommands)
+//            ->merge(config('configurer.customCommands', []))
+//            ->filter()
+//            ->map(static fn (string $item) => resolve($item));
+        $commands = collect($commands);
 
         if ($passable->isVerbose()) {
             info(sprintf('%s commands will be installed', $commands->count()));
