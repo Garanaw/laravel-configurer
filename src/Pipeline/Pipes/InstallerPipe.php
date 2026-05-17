@@ -83,7 +83,8 @@ class InstallerPipe implements Pipe
             ->filter(static fn (Library $library): bool => $library->hasInstallCommands())
             ->flatMap(static fn (Library $library) => $library->installCommands)
             ->merge(config('configurer.customCommands', []))
-            ->filter();
+            ->filter()
+            ->map(static fn (string $item) => resolve($item));
 
         if ($passable->isVerbose()) {
             info(sprintf('%s commands will be installed', $commands->count()));
