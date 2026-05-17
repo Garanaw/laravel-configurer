@@ -68,7 +68,7 @@ class ComposerPipeline extends Pipeline
 
         table(
             headers: ['Pipes'],
-            rows: array_map(static fn (array $pipe) => class_basename($pipe['class']), $pipes),
+            rows: array_map(static fn (array $pipe) => [class_basename($pipe['class'])], $pipes),
         );
     }
 }
