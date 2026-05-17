@@ -63,6 +63,8 @@ class RequirerPipe implements Pipe
 
         $passable->libraries->each(static fn (Library $library) => $library->required());
 
+        $this->composer->dumpAutoloads();
+
         return true;
     }
 
