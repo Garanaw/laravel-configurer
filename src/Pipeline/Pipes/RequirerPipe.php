@@ -27,6 +27,8 @@ class RequirerPipe implements Pipe
 
     public function handle(Passable $passable, \Closure $next): Passable
     {
+        info('Running requirer pipe...');
+
         try {
             $installed = $this->execute($passable);
 

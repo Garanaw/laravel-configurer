@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Garanaw\LaravelConfigurer\Pipeline;
 
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 use Illuminate\Pipeline\Pipeline;
 
-use function Laravel\Prompts\info;
+use function Laravel\Prompts\table;
 
 class ComposerPipeline extends Pipeline
 {
@@ -64,9 +63,11 @@ class ComposerPipeline extends Pipeline
 
     private function display(array $pipes): void
     {
-        array_map(static fn(array $pipe) => class_basename($pipe['class']), $pipes)
-            |> (static fn($x) => implode(', ', $x))
-            |> (static fn($x) => sprintf('The following pipes will be executed: %s', $x))
-            |> info(...);
+        $classes = array_map(static fn (array $pipe) => class_basename($pipe['class']), $pipes);
+
+        table(
+            headers: ['Pipes'],
+            rows: $classes,
+        );
     }
 }

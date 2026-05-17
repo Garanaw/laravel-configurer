@@ -26,6 +26,8 @@ class DevRequirerPipe implements Pipe
 
     public function handle(Passable $passable, \Closure $next): Passable
     {
+        info('Running dev requirer pipe...');
+
         try {
             $this->execute($passable);
         } catch (\Throwable $e) {

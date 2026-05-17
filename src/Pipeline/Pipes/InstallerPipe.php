@@ -7,14 +7,15 @@ namespace Garanaw\LaravelConfigurer\Pipeline\Pipes;
 use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;
 use Garanaw\LaravelConfigurer\Mechanisms\KhanSort;
 use Illuminate\Support\Enumerable;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;
+use function Laravel\Prompts\warning;
 
 class InstallerPipe implements Pipe
 {
@@ -25,6 +26,8 @@ class InstallerPipe implements Pipe
 
     public function handle(Passable $passable, \Closure $next): Passable
     {
+        info('Running installer pipe...');
+
         try {
             $this->execute($passable);
         } catch (\Throwable $e) {
@@ -36,10 +39,16 @@ class InstallerPipe implements Pipe
 
     protected function execute(Passable $passable): void
     {
+        if ($passable->shouldInstall() === false) {
+            warning('Skipping installation.');
+
+            return;
+        }
+
         $libraries = $passable->allLibraries();
         $commands = $this->getCommands($libraries);
 
-        if ($passable->options->isVerbose()) {
+        if ($passable->isVerbose()) {
             $this->display($commands);
         }
 

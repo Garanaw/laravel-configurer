@@ -8,14 +8,13 @@ use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\PublisherManager;
-use Illuminate\Contracts\Console\Application;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Enumerable;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;
+use function Laravel\Prompts\warning;
 
 class PublisherPipe implements Pipe
 {
@@ -26,6 +25,8 @@ class PublisherPipe implements Pipe
 
     public function handle(Passable $passable, \Closure $next): Passable
     {
+        info('Running publisher pipe...');
+
         try {
             $this->execute($passable);
         } catch (\Throwable $e) {
@@ -40,6 +41,8 @@ class PublisherPipe implements Pipe
     public function execute(Passable $passable): void
     {
         if ($passable->shouldPublish() === false) {
+            warning('Skipping publishing.');
+
             return;
         }
 
