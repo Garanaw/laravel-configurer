@@ -43,9 +43,7 @@ class DevRequirerPipe implements Pipe
     {
         $commands = $passable->devLibraries->map(static fn (Library $library) => $library->command)->all();
 
-        if ($passable->isVerbose()) {
-            $this->display($passable->devLibraries);
-        }
+        $this->display($passable->devLibraries);
 
         $this->composer->requirePackages(
             packages: $commands,

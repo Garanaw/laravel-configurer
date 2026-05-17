@@ -52,9 +52,7 @@ class ComposerPipeline extends Pipeline
             $pipes = array_merge($pipes, $customPipes);
         }
 
-        if ($passable->options->isVerbose()) {
-            $this->display($pipes);
-        }
+        $this->display($pipes);
 
         return array_map(
             static fn (array $class) => resolve($class['class'], $class['params'] ?? []),

@@ -50,9 +50,7 @@ class PublisherPipe implements Pipe
             static fn (Library $library) => $library->hasPublishCommands()
         );
 
-        if ($passable->isVerbose()) {
-            $this->display($libraries);
-        }
+        $this->display($libraries);
 
         /** @var Library $library */
         foreach ($libraries as $library) {

@@ -50,9 +50,7 @@ class InstallerPipe implements Pipe
         $libraries = $passable->allLibraries();
         $commands = $this->getCommands($libraries, $passable);
 
-        if ($passable->isVerbose()) {
-            $this->display($commands);
-        }
+        $this->display($commands);
 
         foreach ($commands as $command) {
             if (! $passable->options->shouldAutoConfirm()) {
@@ -107,7 +105,17 @@ class InstallerPipe implements Pipe
             info(sprintf('%s commands will be installed', $commands->count()));
         }
 
-        return $this->sort->sort($commands);
+        try {
+            return $this->sort->sort($commands);
+        } catch (\Throwable $e) {
+            dd([
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
+
+            return $commands;
+        }
     }
 
     protected function display(Enumerable $commands): void

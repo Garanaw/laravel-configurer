@@ -48,9 +48,7 @@ class RequirerPipe implements Pipe
     {
         $commands = $passable->libraries->map(static fn (Library $library) => $library->command)->all();
 
-        if ($passable->isVerbose()) {
-            $this->display($passable->libraries);
-        }
+        $this->display($passable->libraries);
 
         if (! $passable->options->shouldAutoConfirm()) {
             if (! confirm('Do you want to require these packages now?')) {
