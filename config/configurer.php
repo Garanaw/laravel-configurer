@@ -88,7 +88,7 @@ return [
             'command' => 'laravel/ai',
             'needsMigrating' => true,
             'publishCommands' => [
-                'provider' => 'Laravel\Ai\AiServiceProvider',
+                'provider' => \Laravel\Ai\AiServiceProvider::class,
             ],
         ],
         [
