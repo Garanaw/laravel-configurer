@@ -32,6 +32,11 @@ class InstallerPipe implements Pipe
             $this->execute($passable);
         } catch (\Throwable $e) {
             error(sprintf('Failed to run install commands: %s', $e->getMessage()));
+            dd([
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
 
             return $passable;
         }
@@ -77,6 +82,8 @@ class InstallerPipe implements Pipe
      */
     protected function getCommands(Enumerable $libraries, Passable $passable): Enumerable
     {
+        info('Building installation commands...');
+
         $commands = [];
 
         foreach ($libraries as $library) {
@@ -85,7 +92,7 @@ class InstallerPipe implements Pipe
             }
 
             foreach ($library->installCommands as $command) {
-                $commands[] = resolve($command);
+                $commands[] = $command;
             }
         }
 
@@ -93,17 +100,9 @@ class InstallerPipe implements Pipe
             $commands[] = resolve($command);
         }
 
-//        $commands = $libraries
-//            ->filter(static fn (Library $library): bool => $library->hasInstallCommands())
-//            ->flatMap(static fn (Library $library) => $library->installCommands)
-//            ->merge(config('configurer.customCommands', []))
-//            ->filter()
-//            ->map(static fn (string $item) => resolve($item));
         $commands = collect($commands);
 
-        if ($passable->isVerbose()) {
-            info(sprintf('%s commands will be installed', $commands->count()));
-        }
+        info(sprintf('%s commands will be installed', $commands->count()));
 
         try {
             return $this->sort->sort($commands);
@@ -113,8 +112,6 @@ class InstallerPipe implements Pipe
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
             ]);
-
-            return $commands;
         }
     }
 
