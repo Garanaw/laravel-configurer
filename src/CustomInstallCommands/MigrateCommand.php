@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
-use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Enum\When;
-use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Support\Enumerable;
 
-class MigrateCommand implements InstallCommand
+class MigrateCommand extends InstallCommand
 {
     use CanRun;
 
@@ -33,7 +30,7 @@ class MigrateCommand implements InstallCommand
         return static::class;
     }
 
-    public function dependsOn(): ?array
+    public function dependsOn(): array
     {
         return [
             SeedableMigrationsInstall::makeIdForDep(),
@@ -46,29 +43,10 @@ class MigrateCommand implements InstallCommand
             return true;
         }
 
-        if ($this->hasMissingDependencies($passable->alLibraries())) {
+        if ($this->hasMissingDependencies($passable->allLibraries())) {
             return false;
         }
 
         return $this->kernel->call('migrate', ['--force', '--step']) === 0;
-    }
-
-    private function hasMissingDependencies(Enumerable $libraries): bool
-    {
-        $dependencies = $this->dependsOn();
-
-        if (empty($dependencies)) {
-            return false;
-        }
-
-        $allCommands = $libraries->flatMap(static fn (Library $library) => $library->installCommands)->all();
-
-        foreach ($dependencies as $dependency) {
-            if (array_any($allCommands, static fn ($command) => $command::class === $dependency)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

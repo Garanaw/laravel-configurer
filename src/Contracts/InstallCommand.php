@@ -19,7 +19,7 @@ interface InstallCommand
 
     public function command(): string;
 
-    public function dependsOn(): ?array;
+    public function dependsOn(): array;
 
     public function install(Passable $passable): bool;
 }

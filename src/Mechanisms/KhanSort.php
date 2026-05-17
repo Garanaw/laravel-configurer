@@ -13,16 +13,21 @@ class KhanSort
     /** @param Enumerable<InstallCommand> $commands */
     public function sort(Enumerable $commands): Enumerable
     {
+        // Normalise entry (avoids issues with LazyCollection)
+        $commands = collect($commands)->values();
+
         $graph = [];
         $inDegree = [];
         $map = [];
+        $queue = [];
+        $sorted = [];
 
-        // 1. Index
+        // 1. Index commands
         foreach ($commands as $command) {
-            $id = $command->id();
+            $id = $this->normalizeId($command->id());
 
             if (isset($map[$id])) {
-                throw new RuntimeException("ID duplicado detectado: {$id}");
+                throw new RuntimeException("Duplicated ID detected: {$id}");
             }
 
             $map[$id] = $command;
@@ -32,30 +37,31 @@ class KhanSort
 
         // 2. Build graph
         foreach ($commands as $command) {
-            $id = $command->id();
+            $id = $this->normalizeId($command->id());
 
-            foreach ($command->dependsOn() as $depId) {
-                if (!isset($graph[$depId])) {
+            foreach ($command->dependsOn() as $depRaw) {
+                $dependencyId = $this->normalizeId($depRaw);
+
+                if (!isset($graph[$dependencyId])) {
                     throw new RuntimeException(
-                        "Dependencia no encontrada: {$depId} requerida por {$id}"
+                        "Dependency '{$dependencyId}' not found. Required by '{$id}'"
                     );
                 }
 
-                $graph[$depId][] = $id;
+                // dep -> id
+                $graph[$dependencyId][] = $id;
                 $inDegree[$id]++;
             }
         }
 
-        // 3. Init queue
-        $queue = [];
-
+        // 3. Init queue (nodes without dependencies)
         foreach ($inDegree as $id => $degree) {
             if ($degree === 0) {
                 $queue[] = $id;
             }
         }
 
-        $sorted = [];
+        sort($queue); // determinism
 
         // 4. Kahn
         while (!empty($queue)) {
@@ -69,6 +75,8 @@ class KhanSort
                     $queue[] = $neighbor;
                 }
             }
+
+            sort($queue); // keep deterministic order
         }
 
         // 5. Detect cycles
@@ -76,11 +84,35 @@ class KhanSort
             $remaining = array_diff(array_keys($map), $sorted);
 
             throw new RuntimeException(
-                'Dependencias circulares detectadas: ' . implode(', ', $remaining)
+                'Circular dependencies detected between: ' . implode(', ', $remaining)
             );
         }
 
-        // 6. Map result
-        return collect($sorted)->map(static fn ($id) => $map[$id]);
+        // 6. Map result to instances
+        return collect($sorted)->map(fn ($id) => $map[$id]);
+    }
+
+    protected function normalizeId(mixed $item): string
+    {
+        if ($item instanceof InstallCommand) {
+            return $item->id() |> trim(...) |> strtolower(...);
+        }
+
+        if (! is_string($item)) {
+            throw new RuntimeException(
+                'Invalid dependency type: ' . get_debug_type($item)
+            );
+        }
+
+        // Allow classes as dependencies (improved DX)
+        if (
+            class_exists($item) &&
+            is_subclass_of($item, InstallCommand::class) &&
+            method_exists($item, 'makeIdForDep')
+        ) {
+            return $item::makeIdForDep() |> trim(...) |> strtolower(...);
+        }
+
+        return $item |> trim(...) |> strtolower(...);
     }
 }

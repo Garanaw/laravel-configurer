@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
-use Garanaw\LaravelConfigurer\Contracts\InstallCommand;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\HasCustomId;
 use Garanaw\LaravelConfigurer\Dto\Passable;
@@ -12,7 +11,7 @@ use Garanaw\LaravelConfigurer\Enum\When;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemManager;
 
-class SeedableMigrationsInstall implements InstallCommand
+class SeedableMigrationsInstall extends InstallCommand
 {
     use CanRun;
     use HasCustomId;
@@ -42,11 +41,6 @@ class SeedableMigrationsInstall implements InstallCommand
     public function command(): string
     {
         return static::class;
-    }
-
-    public function dependsOn(): ?array
-    {
-        return null;
     }
 
     public function install(Passable $passable): bool
