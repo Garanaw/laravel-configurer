@@ -9,6 +9,9 @@ use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Support\Facades\Process;
+use function Illuminate\Support\artisan_binary;
+use function Illuminate\Support\php_binary;
 use function Laravel\Prompts\alert;
 
 class ProviderPublisher implements PublisherContract
@@ -27,20 +30,28 @@ class ProviderPublisher implements PublisherContract
             return;
         }
 
-        if (! class_exists($provider)) {
-            alert(sprintf('The provider class %s does not exist. Skipping publishing for %s.', $provider, $library->name));
+        Process::run([
+            php_binary(),
+            artisan_binary(),
+            'vendor:publish',
+            '--provider',
+            $provider,
+        ]);
 
-            return;
-        }
+//        if (! class_exists($provider)) {
+//            alert(sprintf('The provider class %s does not exist. Skipping publishing for %s.', $provider, $library->name));
+//
+//            return;
+//        }
 
-        $this->app->register($provider, force: true);
-
-        $params = ['--provider' => $provider];
-
-        $this->artisan->call(
-            command: 'vendor:publish',
-            parameters: $params,
-            outputBuffer: $this->output,
-        );
+//        $this->app->register($provider, force: true);
+//
+//        $params = ['--provider' => $provider];
+//
+//        $this->artisan->call(
+//            command: 'vendor:publish',
+//            parameters: $params,
+//            outputBuffer: $this->output,
+//        );
     }
 }
