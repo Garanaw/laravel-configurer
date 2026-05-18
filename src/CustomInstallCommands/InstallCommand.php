@@ -10,9 +10,16 @@ use Illuminate\Support\Enumerable;
 
 abstract class InstallCommand implements InstallCommandContract
 {
+    protected int $weight = 0;
+
     public function dependsOn(): array
     {
         return [];
+    }
+
+    public function weight(): int
+    {
+        return $this->weight;
     }
 
     protected function hasMissingDependencies(Enumerable $libraries): bool

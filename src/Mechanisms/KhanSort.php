@@ -61,7 +61,7 @@ class KhanSort
             }
         }
 
-        sort($queue); // determinism
+        $this->sortQueue($queue, $map); // determinism
 
         // 4. Kahn
         while (!empty($queue)) {
@@ -76,7 +76,7 @@ class KhanSort
                 }
             }
 
-            sort($queue); // keep deterministic order
+            $this->sortQueue($queue, $map); // keep deterministic order
         }
 
         // 5. Detect cycles
@@ -114,5 +114,15 @@ class KhanSort
         }
 
         return $item |> trim(...) |> strtolower(...);
+    }
+
+    protected function sortQueue(array &$queue, array $map): void
+    {
+        usort($queue, static function ($a, $b) use ($map) {
+            $weightA = $map[$a]->weight();
+            $weightB = $map[$b]->weight();
+
+            return $weightA <=> $weightB ?: $a <=> $b;
+        });
     }
 }

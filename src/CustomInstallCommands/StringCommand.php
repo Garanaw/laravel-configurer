@@ -6,7 +6,6 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 use Illuminate\Contracts\Console\Kernel;
 
 class StringCommand extends InstallCommand
@@ -21,11 +20,6 @@ class StringCommand extends InstallCommand
     public function id(): string
     {
         return sprintf('lib:%s', $this->command);
-    }
-
-    public function when(): When
-    {
-        return When::END;
     }
 
     public function command(): string

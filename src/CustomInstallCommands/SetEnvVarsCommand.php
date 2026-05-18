@@ -6,12 +6,16 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 use Garanaw\LaravelConfigurer\Library;
 
 class SetEnvVarsCommand extends InstallCommand
 {
     use CanRun;
+
+    /**
+     * @var int The smaller the number, the sooner it will be executed
+     */
+    protected int $weight = -100;
 
     public function id(): string
     {
@@ -46,11 +50,6 @@ class SetEnvVarsCommand extends InstallCommand
         file_put_contents($envPath, $envFile);
 
         return true;
-    }
-
-    public function when(): When
-    {
-        return When::END_ALL;
     }
 
     public function command(): string

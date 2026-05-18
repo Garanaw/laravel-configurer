@@ -6,7 +6,6 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 use Illuminate\Contracts\Console\Kernel;
 
 class MigrateCommand extends InstallCommand
@@ -18,11 +17,6 @@ class MigrateCommand extends InstallCommand
     public function id(): string
     {
         return 'internal:migrate';
-    }
-
-    public function when(): When
-    {
-        return When::END_ALL;
     }
 
     public function command(): string

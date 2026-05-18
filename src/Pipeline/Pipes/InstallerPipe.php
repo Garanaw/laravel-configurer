@@ -32,11 +32,6 @@ class InstallerPipe implements Pipe
             $this->execute($passable);
         } catch (\Throwable $e) {
             error(sprintf('Failed to run install commands: %s', $e->getMessage()));
-            dd([
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
-            ]);
 
             return $passable;
         }
@@ -104,15 +99,7 @@ class InstallerPipe implements Pipe
 
         info(sprintf('%s commands will be installed', $commands->count()));
 
-        try {
-            return $this->sort->sort($commands);
-        } catch (\Throwable $e) {
-            dd([
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
-            ]);
-        }
+        return $this->sort->sort($commands);
     }
 
     protected function display(Enumerable $commands): void

@@ -7,7 +7,6 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\HasCustomId;
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemManager;
 
@@ -32,11 +31,6 @@ class SeedableMigrationsInstall extends InstallCommand
         private readonly Application $app,
         private readonly FilesystemManager $filesystem,
     ) {}
-
-    public function when(): When
-    {
-        return When::END_ALL;
-    }
 
     public function command(): string
     {

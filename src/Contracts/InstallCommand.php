@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Garanaw\LaravelConfigurer\Contracts;
 
 use Garanaw\LaravelConfigurer\Dto\Passable;
-use Garanaw\LaravelConfigurer\Enum\When;
 
 interface InstallCommand
 {
@@ -15,7 +14,7 @@ interface InstallCommand
 
     public function didRun(): bool;
 
-    public function when(): When;
+    public function weight(): int;
 
     public function command(): string;
 
