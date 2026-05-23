@@ -9,6 +9,8 @@ use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
 use Garanaw\LaravelConfigurer\Mechanisms\KhanSort;
+use Illuminate\Console\Concerns\InteractsWithIO;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Enumerable;
 
 use function Laravel\Prompts\confirm;
@@ -21,6 +23,7 @@ class InstallerPipe implements Pipe
 {
     public function __construct(
         private readonly KhanSort $sort,
+        private readonly OutputStyle $outputStyle,
     ) {
     }
 
@@ -57,6 +60,10 @@ class InstallerPipe implements Pipe
                 if (! confirm(sprintf('Do you want to run %s now?', $command->command()))) {
                     continue;
                 }
+            }
+
+            if (method_exists($command, 'setOutput')) {
+                $command->setOutput($this->outputStyle);
             }
 
             try {

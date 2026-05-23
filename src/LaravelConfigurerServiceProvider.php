@@ -8,6 +8,7 @@ use Garanaw\LaravelConfigurer\Console\Commands\Configurer;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\CommandPublisher;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\ProviderPublisher;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\DevRequirerPipe;
+use Garanaw\LaravelConfigurer\Pipeline\Pipes\InstallerPipe;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\RequirerPipe;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -30,6 +31,7 @@ class LaravelConfigurerServiceProvider extends ServiceProvider
             // Pipes
             RequirerPipe::class,
             DevRequirerPipe::class,
+            InstallerPipe::class,
             // Commands
             ProviderPublisher::class,
             CommandPublisher::class,

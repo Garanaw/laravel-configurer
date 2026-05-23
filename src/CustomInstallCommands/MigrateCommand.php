@@ -6,11 +6,13 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
+use Illuminate\Console\Concerns\InteractsWithIO;
 use Illuminate\Contracts\Console\Kernel;
 
 class MigrateCommand extends InstallCommand
 {
     use CanRun;
+    use InteractsWithIO;
 
     public function __construct(private readonly Kernel $kernel) {}
 
@@ -41,6 +43,6 @@ class MigrateCommand extends InstallCommand
             return false;
         }
 
-        return $this->kernel->call('migrate', ['--force', '--step']) === 0;
+        return $this->kernel->call('migrate', ['--force', '--step'], $this->getOutput()) === 0;
     }
 }

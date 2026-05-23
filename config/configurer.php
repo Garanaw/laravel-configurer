@@ -183,6 +183,32 @@ return [
             'command' => 'fruitcake/laravel-debugbar',
             'canBeDevOnly' => true,
         ],
+        [
+            'name' => 'Laravel Brain',
+            'command' => 'laramint/laravel-brain',
+            'canBeDevOnly' => true,
+            'needsMigrating' => true,
+            'publishCommands' => [
+                'provider' => LaraMint\LaravelBrain\LaravelBrainServiceProvider::class,
+                'tags' => [
+                    'laravel-brain-migrations',
+                    'laravel-brain-config',
+                ],
+            ],
+            'envVars' => [
+                'LARAVEL_BRAIN_AUTO_DISCOVER_ROUTES' => true,
+                'LARAVEL_BRAIN_AUTO_DISCOVER_EXCLUDE_VENDOR' => false,
+                'LARAVEL_BRAIN_DRIVER' => 'storage', //database
+                'LARAVEL_BRAIN_DB_TABLE' => 'laravel_brain_graphs',
+                'LARAVEL_BRAIN_DB_CONNECTION' => 'laravel-brain',
+                'LARAVEL_BRAIN_DB_DRIVER' => 'mysql',
+                'LARAVEL_BRAIN_DB_HOST' => '127.0.0.1',
+                'LARAVEL_BRAIN_DB_PORT' => '3306',
+                'LARAVEL_BRAIN_DB_DATABASE' => 'laravel_brain',
+                'LARAVEL_BRAIN_DB_USERNAME' => 'brain',
+                'LARAVEL_BRAIN_DB_PASSWORD' => 'secret',
+            ],
+        ],
         // Testing libraries
         [
             'name' => 'Pest',
