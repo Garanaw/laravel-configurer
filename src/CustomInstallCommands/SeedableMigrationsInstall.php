@@ -44,13 +44,33 @@ class SeedableMigrationsInstall extends InstallCommand
         $migrations = glob($path . '/*.php');
 
         foreach ($migrations as $migration) {
-            file_get_contents($migration)
-                |> (static fn ($x) => str_replace(self::BLUEPRINT_SEARCH_PATTERN, self::BLUEPRINT_REPLACE_PATTERN, $x))
-                |> (static fn ($x) => str_replace(self::MIGRATION_SEARCH_PATTERN, self::MIGRATION_REPLACE_PATTERN, $x))
-                |> (static fn ($x) => str_replace(self::SCHEMA_SEARCH_PATTERN, self::SCHEMA_REPLACE_PATTERN, $x))
-                |> (static fn ($x) => file_put_contents($migration, $x));
+            $this->modifyMigrationFile($migration);
         }
 
         return true;
+    }
+
+    protected function modifyMigrationFile(string $file): void
+    {
+        $content = file_get_contents($file);
+
+        if (str_contains($content, self::MIGRATION_SEARCH_PATTERN)) {
+            // Not an extendable migration, pass
+            return;
+        }
+
+        $getTableMethod = <<<METHOD
+    public function getTable(): string
+    {
+        return '';
+    }
+METHOD;
+
+        $content
+            |> (static fn ($x) => str_replace(self::MIGRATION_SEARCH_PATTERN, self::MIGRATION_REPLACE_PATTERN, $x))
+            |> (static fn ($x) => str_replace(self::BLUEPRINT_SEARCH_PATTERN, self::BLUEPRINT_REPLACE_PATTERN, $x))
+            |> (static fn ($x) => str_replace(self::SCHEMA_SEARCH_PATTERN, self::SCHEMA_REPLACE_PATTERN, $x))
+            |> (static fn ($x) => str($x)->replaceLast('}', "\n" . $getTableMethod . "\n}")->toString())
+            |> (static fn ($x) => file_put_contents($file, $x));
     }
 }
