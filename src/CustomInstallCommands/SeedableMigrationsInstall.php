@@ -11,6 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemManager;
 
 use function Laravel\Prompts\info;
+use function Laravel\Prompts\pause;
 use function Laravel\Prompts\warning;
 
 class SeedableMigrationsInstall extends InstallCommand
@@ -29,6 +30,8 @@ class SeedableMigrationsInstall extends InstallCommand
     private const string SCHEMA_SEARCH_PATTERN = 'Schema::';
 
     private const string SCHEMA_REPLACE_PATTERN = '$this->schema->';
+
+    private const string SCHEMA_IMPORT_PATTERN = 'use Illuminate\Support\Facades\Schema;';
 
     public function __construct(
         private readonly Application $app,
@@ -53,6 +56,9 @@ class SeedableMigrationsInstall extends InstallCommand
         foreach ($migrations as $migration) {
             $this->modifyMigrationFile($migration);
         }
+
+        info('Migration files have been modified to be seedable. Please review the changes before proceeding.');
+        pause('Add your seeders if needed, then press any key to continue...');
 
         return true;
     }
@@ -81,6 +87,8 @@ METHOD;
             |> (static fn ($x) => str_replace(self::MIGRATION_SEARCH_PATTERN, self::MIGRATION_REPLACE_PATTERN, $x))
             |> (static fn ($x) => str_replace(self::BLUEPRINT_SEARCH_PATTERN, self::BLUEPRINT_REPLACE_PATTERN, $x))
             |> (static fn ($x) => str_replace(self::SCHEMA_SEARCH_PATTERN, self::SCHEMA_REPLACE_PATTERN, $x))
+            |> (static fn ($x) => str_replace(self::SCHEMA_IMPORT_PATTERN . "\n", '', $x))
+            |> (static fn ($x) => str_replace("\n\n", "\n", $x))
             |> (static fn ($x) => str($x)->replaceLast('}', "\n" . $getTableMethod . "\n}")->toString())
             |> (static fn ($x) => file_put_contents($file, $x));
     }

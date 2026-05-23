@@ -7,6 +7,7 @@ namespace Garanaw\LaravelConfigurer\CustomInstallCommands;
 use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
+use function Laravel\Prompts\pause;
 
 class SetEnvVarsCommand extends InstallCommand
 {
@@ -48,6 +49,8 @@ class SetEnvVarsCommand extends InstallCommand
         }
 
         file_put_contents($envPath, $envFile);
+
+        pause('Environment variables have been added to your .env file. Please review and adjust them as necessary before proceeding.');
 
         return true;
     }
