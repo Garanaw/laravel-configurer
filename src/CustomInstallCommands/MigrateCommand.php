@@ -8,6 +8,9 @@ use Garanaw\LaravelConfigurer\CustomInstallCommands\Concerns\CanRun;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Illuminate\Console\Concerns\InteractsWithIO;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Support\Facades\Process;
+use function Illuminate\Support\artisan_binary;
+use function Illuminate\Support\php_binary;
 
 class MigrateCommand extends InstallCommand
 {
@@ -43,6 +46,8 @@ class MigrateCommand extends InstallCommand
             return false;
         }
 
-        return $this->kernel->call('migrate', ['--force', '--step'], $this->getOutput()) === 0;
+        return Process::run([php_binary(), artisan_binary(), 'migrate', '--step', '--force'])->successful();
+
+//        return $this->kernel->call('migrate', ['--force', '--step'], $this->getOutput()) === 0;
     }
 }
