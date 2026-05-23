@@ -10,6 +10,9 @@ use Garanaw\LaravelConfigurer\Dto\Passable;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemManager;
 
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\warning;
+
 class SeedableMigrationsInstall extends InstallCommand
 {
     use CanRun;
@@ -43,6 +46,10 @@ class SeedableMigrationsInstall extends InstallCommand
 
         $migrations = glob($path . '/*.php');
 
+        if (! $migrations) {
+            info('No migration files found, skipping modification.');
+        }
+
         foreach ($migrations as $migration) {
             $this->modifyMigrationFile($migration);
         }
@@ -54,10 +61,14 @@ class SeedableMigrationsInstall extends InstallCommand
     {
         $content = file_get_contents($file);
 
-        if (str_contains($content, self::MIGRATION_SEARCH_PATTERN)) {
+        if (! $content || ! str_contains($content, self::MIGRATION_SEARCH_PATTERN)) {
             // Not an extendable migration, pass
+            warning(sprintf('Migration file %s is not extendable, skipping...', $file));
+
             return;
         }
+
+        info(sprintf('Modifying migration file %s...', $file));
 
         $getTableMethod = <<<METHOD
     public function getTable(): string
