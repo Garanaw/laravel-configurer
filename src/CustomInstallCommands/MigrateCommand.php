@@ -47,7 +47,5 @@ class MigrateCommand extends InstallCommand
         }
 
         return Process::run([php_binary(), artisan_binary(), 'migrate', '--step', '--force'])->successful();
-
-//        return $this->kernel->call('migrate', ['--force', '--step'], $this->getOutput()) === 0;
     }
 }
