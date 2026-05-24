@@ -27,12 +27,16 @@ return [
                 'command' => 'sail:publish',
             ],
             'canBeDevOnly' => true,
+            'tags' => ['laravel', 'sail', 'docker'],
+            'github' => 'https://github.com/laravel/sail',
         ],
         [
             'name' => 'Laravel Horizon',
             'command' => 'laravel/horizon',
             'installCommands' => ['horizon:install'],
             'needsMigrating' => true,
+            'tags' => ['laravel', 'horizon', 'monitoring', 'queue'],
+            'github' => 'https://github.com/laravel/horizon',
         ],
         [
             'name' => 'Laravel Telescope',
@@ -40,6 +44,8 @@ return [
             'installCommands' => ['telescope:install'],
             'needsMigrating' => true,
             'canBeDevOnly' => true,
+            'tags' => ['laravel', 'telescope', 'monitoring', 'debug'],
+            'github' => 'https://github.com/laravel/telescope',
         ],
         [
             'name' => 'Laravel Pulse',
@@ -52,6 +58,8 @@ return [
                     'pulse-config',
                 ],
             ],
+            'tags' => ['laravel', 'pulse', 'monitoring', 'debug'],
+            'github' => 'https://github.com/laravel/pulse',
         ],
         [
             'name' => 'Laravel Reverb',
@@ -69,6 +77,8 @@ return [
                 'REVERB_PORT' => '443',
             ],
             'needsMigrating' => true,
+            'tags' => ['laravel', 'reverb', 'push'],
+            'github' => 'https://github.com/laravel/reverb',
         ],
         [
             'name' => 'Laravel Pennant',
@@ -77,11 +87,15 @@ return [
                 'provider' => Laravel\Pennant\PennantServiceProvider::class,
             ],
             'needsMigrating' => true,
+            'tags' => ['laravel', 'pennant', 'feature', 'flags'],
+            'github' => 'https://github.com/laravel/pennant',
         ],
         [
             'name' => 'Laravel Pint',
             'command' => 'laravel/pint',
             'canBeDevOnly' => true,
+            'tags' => ['laravel', 'pint', 'standards'],
+            'github' => 'https://github.com/laravel/pint',
         ],
         [
             'name' => 'Laravel AI',
@@ -90,10 +104,14 @@ return [
             'publishCommands' => [
                 'provider' => \Laravel\Ai\AiServiceProvider::class,
             ],
+            'tags' => ['laravel', 'ai'],
+            'github' => 'https://github.com/laravel/ai',
         ],
         [
             'name' => 'Laravel Prompts',
             'command' => 'laravel/prompts',
+            'tags' => ['laravel', 'prompt', 'ui', 'terminal'],
+            'github' => 'https://github.com/laravel/prompts',
         ],
         // Migration libraries
         [
@@ -105,12 +123,16 @@ return [
             'installCommands' => [
                 SeedableMigrationsInstall::class,
             ],
+            'tags' => ['garanaw', 'laravel', 'seeding', 'migrations', 'db', 'database'],
+            'github' => 'https://github.com/Garanaw/seedable-migrations',
         ],
         // Spatie libraries
         [
             'name' => 'Laravel Permissions',
             'command' => 'spatie/laravel-permission',
             'needsMigrating' => true,
+            'tags' => ['spatie', 'permissions', 'security'],
+            'github' => 'https://github.com/spatie/laravel-permission',
         ],
         [
             'name' => 'Spatie Media Library',
@@ -122,7 +144,9 @@ return [
                     'medialibrary-migrations',
                     'medialibrary-config',
                 ]
-            ]
+            ],
+            'tags' => ['spatie', 'medialibrary'],
+            'github' => 'https://github.com/spatie/laravel-medialibrary',
         ],
         [
             'name' => 'Spatie Laravel Tags',
@@ -135,6 +159,8 @@ return [
                 ],
             ],
             'needsMigrating' => true,
+            'tags' => ['spatie', 'tags'],
+            'github' => 'https://github.com/spatie/laravel-tags',
         ],
         [
             'name' => 'Spatie Laravel Web Tinker',
@@ -144,6 +170,8 @@ return [
                 'provider' => Spatie\WebTinker\WebTinkerServiceProvider::class,
                 'tags' => ['config'],
             ],
+            'tags' => ['spatie', 'tinker', 'debug'],
+            'github' => 'https://github.com/spatie/laravel-web-tinker',
         ],
         // Filament
         [
@@ -153,35 +181,49 @@ return [
             'publishCommands' => [
                 'tags' => 'filament-config',
             ],
+            'tags' => ['filament', 'panels', 'ui'],
+            'github' => 'https://github.com/filamentphp/filament',
         ],
         // Relation libraries
         [
             'name' => 'Franzose Closure Table',
             'command' => 'franzose/closure-table',
+            'tags' => ['franzose', 'closure-table', 'db', 'database', 'relations'],
+            'github' => 'https://github.com/franzose/ClosureTable',
         ],
         [
             'name' => 'Kalnow Nestedset',
             'command' => 'kalnoy/nestedset',
+            'tags' => ['kalnoy', 'nestedset', 'db', 'database', 'relations'],
+            'github' => 'https://github.com/lazychaser/laravel-nestedset',
         ],
         // Connection libraries
         [
             'name' => 'SaloonPHP',
             'command' => 'saloonphp/saloon',
+            'tags' => ['saloonphp', 'requests', 'api'],
+            'github' => 'https://github.com/saloonphp/saloon',
         ],
         [
             'name' => 'Saloon Pagination',
             'command' => 'saloonphp/pagination-plugin',
+            'tags' => ['saloonphp', 'pagination', 'plugin'],
+            'github' => 'https://github.com/saloonphp/pagination-plugin',
         ],
         // Security libraries
         [
             'name' => 'Jenseggers Optimus Prime',
             'command' => 'jenssegers/optimus',
+            'tags' => ['jenssegers', 'optimus', 'id', 'encoding', 'security'],
+            'github' => 'https://github.com/jenssegers/optimus',
         ],
         // Debug libraries
         [
             'name' => 'Laravel Debugbar',
             'command' => 'fruitcake/laravel-debugbar',
             'canBeDevOnly' => true,
+            'tags' => ['laravel', 'debugbar', 'debug', 'development'],
+            'github' => 'https://github.com/fruitcake/laravel-debugbar',
         ],
         [
             'name' => 'Laravel Brain',
@@ -208,6 +250,19 @@ return [
                 'LARAVEL_BRAIN_DB_USERNAME' => 'brain',
                 'LARAVEL_BRAIN_DB_PASSWORD' => 'secret',
             ],
+            'tags' => ['laravel-brain', 'debug', 'development'],
+            'github' => 'https://github.com/laramint/laravel-brain',
+        ],
+        [
+            'name' => 'Laravel DevtoolBox',
+            'command' => 'grazulex/laravel-devtoolbox',
+            'canBeDevOnly' => true,
+            'publishCommands' => [
+                'provider' => Grazulex\LaravelDevtoolbox\LaravelDevtoolboxServiceProvider::class,
+                'tags' => ['devtoolbox-config', 'devtoolbox-views'],
+            ],
+            'tags' => ['laravel-devtoolbox', 'debug', 'development'],
+            'github' => 'https://github.com/Grazulex/laravel-devtoolbox',
         ],
         // Testing libraries
         [
@@ -216,15 +271,68 @@ return [
             'canBeDevOnly' => true,
             'withAllDependencies' => true,
             'installCommands' => ['./vendor/pest/pest --init'],
+            'tags' => ['pest', 'tests'],
+            'github' => 'https://github.com/pestphp/pest',
         ],
         // Helper libraries
         [
             'name' => 'Laravel Numeral',
             'command' => 'garanaw/laravel-numeral',
+            'tags' => ['garanaw', 'laravel', 'numeral', 'helpers', 'math'],
+            'github' => 'https://github.com/Garanaw/laravel-numeral',
         ],
         [
             'name' => 'Units of Measure',
             'command' => 'php-units-of-measure/php-units-of-measure',
+            'tags' => ['php-units-of-measure', 'units', 'helpers'],
+            'github' => 'https://github.com/PhpUnitsOfMeasure/phpunit-of-measure',
+        ],
+        [
+            'name' => 'StrSim',
+            'command' => 'edgaras/strsim',
+            'tags' => ['edgaras', 'str-sim', 'string', 'helpers', 'similarity', 'distance'],
+            'github' => 'https://github.com/Edgaras0x4E/StrSim',
+        ],
+        [
+            'name' => 'Laravel Idempotency',
+            'command' => 'algoyounes/idempotency',
+            'publishCommands' => [
+                'provider' => AlgoYounes\Idempotency\Providers\IdempotencyServiceProvider::class,
+                'tags' => ['config'],
+            ],
+            'tags' => ['laravel', 'idempotency', 'middleware', 'resilience', 'duplicate', 'requests'],
+            'github' => 'https://github.com/algoyounes/laravel-idempotency',
+        ],
+        [
+            'name' => 'Idempotency for Laravel',
+            'command' => 'infinitypaul/idempotency-laravel',
+            'publishCommands' => [
+                'provider' => Infinitypaul\Idempotency\IdempotencyServiceProvider::class,
+            ],
+            'tags' => ['laravel', 'idempotency', 'middleware', 'resilience', 'duplicate', 'requests'],
+            'github' => 'https://github.com/infinitypaul/idempotency-laravel',
+        ],
+        [
+            'name' => 'Laravel Manager',
+            'command' => 'graham-campbell/manager',
+            'tags' => ['laravel-manager', 'laravel', 'manager'],
+            'github' => 'https://github.com/GrahamCampbell/Laravel-Manager',
+        ],
+        [
+            'name' => 'Laravel Markdown',
+            'command' => 'graham-campbell/markdown',
+            'publishCommands' => [
+                'provider' => GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+            ],
+            'tags' => ['laravel-markdown', 'laravel', 'markdown'],
+            'github' => 'https://github.com/GrahamCampbell/Laravel-Markdown',
+        ],
+        // Hardware
+        [
+            'name' => 'Pinout',
+            'command' => 'danjohnson95/pinout',
+            'tags' => ['pinout', 'gpio', 'hardware', 'raspberry-pi'],
+            'github' => 'https://github.com/danjohnson95/pinout',
         ],
     ],
 
