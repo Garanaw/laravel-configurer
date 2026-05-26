@@ -37,19 +37,16 @@ class Show extends Command
             return;
         }
 
-        $map = $allLibraries->map(static function (array $library) {
-            try {
-                return [
-                    'Library' => $library['name'],
-                    'GitHub' => $library['github'],
-                ];
-            } catch (\Throwable) {
-                dd($library);
-            }
-        });
+        $map = $allLibraries->map(static fn (array $library) => [
+            'Library' => $library['name'],
+            'Tags' => implode(', ', $library['tags']),
+            'HasMigrations' => $library['needsMigrating'] ?? false,
+            'HasEnvVars' => array_key_exists('envVars', $library) ?? false,
+            'GitHub' => $library['github'],
+        ]);
 
         table(
-            headers: ['Library', 'GitHub'],
+            headers: ['Library', 'Tags', 'Has Migrations', 'Has Env Vars', 'GitHub'],
             rows: $map->values()->all(),
         );
     }
