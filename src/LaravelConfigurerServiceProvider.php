@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Garanaw\LaravelConfigurer;
 
 use Garanaw\LaravelConfigurer\Console\Commands\Configurer;
+use Garanaw\LaravelConfigurer\Console\Commands\Show;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\CommandPublisher;
 use Garanaw\LaravelConfigurer\Mechanisms\Publishers\ProviderPublisher;
 use Garanaw\LaravelConfigurer\Pipeline\Pipes\DevRequirerPipe;
@@ -48,7 +49,10 @@ class LaravelConfigurerServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->about();
 
-            $this->commands([Configurer::class]);
+            $this->commands([
+                Configurer::class,
+                Show::class,
+            ]);
 
             $this->publishes([
                 __DIR__ . '/../config/configurer.php' => config_path('configurer.php'),
