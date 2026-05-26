@@ -264,6 +264,41 @@ return [
             'tags' => ['laravel-devtoolbox', 'debug', 'development'],
             'github' => 'https://github.com/Grazulex/laravel-devtoolbox',
         ],
+        [
+            'name' => 'Spatie Backtrace',
+            'command' => 'spatie/backtrace',
+            'tags' => ['spatie', 'backtrace', 'debug', 'development'],
+            'github' => 'https://github.com/spatie/backtrace',
+        ],
+        // Export
+        [
+            'name' => 'Laravel Excel',
+            'command' => 'maatwebsite/excel',
+            'publishCommands' => [
+                'provider' => Maatwebsite\Excel\ExcelServiceProvider::class,
+                'tags' => ['config'],
+            ],
+            'tags' => ['laravel', 'excel', 'export', 'files'],
+            'github' => 'https://github.com/SpartnerNL/Laravel-Excel',
+        ],
+        // NativePHP
+        [
+            'name' => 'NativePHP Mobile',
+            'command' => 'nativephp/mobile',
+            'envVars' => [
+                'NATIVEPHP_APP_ID' => 'com.yourcompany.yourapp',
+            ],
+            'installCommands' => ['native:install'],
+            'tags' => ['native', 'mobile'],
+            'github' => 'https://nativephp.com/docs/mobile/3/getting-started/installation',
+        ],
+        [
+            'name' => 'NativePHP Desktop',
+            'command' => 'nativephp/desktop',
+            'installCommands' => ['native:install'],
+            'tags' => ['native', 'desktop'],
+            'github' => 'https://github.com/NativePHP/desktop',
+        ],
         // Testing libraries
         [
             'name' => 'Pest',
@@ -278,19 +313,19 @@ return [
         [
             'name' => 'Laravel Numeral',
             'command' => 'garanaw/laravel-numeral',
-            'tags' => ['garanaw', 'laravel', 'numeral', 'helpers', 'math'],
+            'tags' => ['garanaw', 'laravel', 'numeral', 'support', 'math'],
             'github' => 'https://github.com/Garanaw/laravel-numeral',
         ],
         [
             'name' => 'Units of Measure',
             'command' => 'php-units-of-measure/php-units-of-measure',
-            'tags' => ['php-units-of-measure', 'units', 'helpers'],
+            'tags' => ['php-units-of-measure', 'units', 'support'],
             'github' => 'https://github.com/PhpUnitsOfMeasure/phpunit-of-measure',
         ],
         [
             'name' => 'StrSim',
             'command' => 'edgaras/strsim',
-            'tags' => ['edgaras', 'str-sim', 'string', 'helpers', 'similarity', 'distance'],
+            'tags' => ['edgaras', 'str-sim', 'string', 'support', 'similarity', 'distance'],
             'github' => 'https://github.com/Edgaras0x4E/StrSim',
         ],
         [
@@ -300,7 +335,7 @@ return [
                 'provider' => AlgoYounes\Idempotency\Providers\IdempotencyServiceProvider::class,
                 'tags' => ['config'],
             ],
-            'tags' => ['laravel', 'idempotency', 'middleware', 'resilience', 'duplicate', 'requests'],
+            'tags' => ['laravel', 'idempotency', 'middleware', 'resilience', 'duplicate', 'requests', 'support'],
             'github' => 'https://github.com/algoyounes/laravel-idempotency',
         ],
         [
@@ -309,13 +344,13 @@ return [
             'publishCommands' => [
                 'provider' => Infinitypaul\Idempotency\IdempotencyServiceProvider::class,
             ],
-            'tags' => ['laravel', 'idempotency', 'middleware', 'resilience', 'duplicate', 'requests'],
+            'tags' => ['laravel', 'idempotency', 'middleware', 'resilience', 'duplicate', 'requests', 'support'],
             'github' => 'https://github.com/infinitypaul/idempotency-laravel',
         ],
         [
             'name' => 'Laravel Manager',
             'command' => 'graham-campbell/manager',
-            'tags' => ['laravel-manager', 'laravel', 'manager'],
+            'tags' => ['laravel-manager', 'laravel', 'manager', 'support'],
             'github' => 'https://github.com/GrahamCampbell/Laravel-Manager',
         ],
         [
@@ -324,7 +359,7 @@ return [
             'publishCommands' => [
                 'provider' => GrahamCampbell\Markdown\MarkdownServiceProvider::class,
             ],
-            'tags' => ['laravel-markdown', 'laravel', 'markdown'],
+            'tags' => ['laravel-markdown', 'laravel', 'markdown', 'support'],
             'github' => 'https://github.com/GrahamCampbell/Laravel-Markdown',
         ],
         // Hardware
