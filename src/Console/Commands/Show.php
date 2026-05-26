@@ -37,16 +37,20 @@ class Show extends Command
             return;
         }
 
+        $map = $allLibraries->map(static function (array $library) {
+            try {
+                return [
+                    'Library' => $library['name'],
+                    'GitHub' => $library['github'],
+                ];
+            } catch (\Throwable) {
+                dd($library);
+            }
+        });
+
         table(
             headers: ['Library', 'GitHub'],
-            rows: $allLibraries->map(
-                static function (array $library) {
-                    return [
-                        'Library' => $library['name'],
-                        'GitHub' => $library['github'],
-                    ];
-                }
-            )
+            rows: $map->values()->all(),
         );
     }
 }
