@@ -42,11 +42,14 @@ class Show extends Command
             return;
         }
 
+        $yes = '<fg=green;options=bold>Yes</>';
+        $no = '<fg=red;options=bold>No</>';
+
         $map = $allLibraries->map(static fn (array $library) => [
             'Library' => $library['name'],
             'Tags' => implode(', ', $library['tags']),
-            'HasMigrations' => ($library['needsMigrating'] ?? false) ? 'Yes' : 'No',
-            'HasEnvVars' => (array_key_exists('envVars', $library) ?? false) ? 'Yes' : 'No',
+            'HasMigrations' => ($library['needsMigrating'] ?? false) ? $yes : $no,
+            'HasEnvVars' => (array_key_exists('envVars', $library) ?? false) ? $yes : $no,
             'GitHub' => $library['github'],
         ]);
 
