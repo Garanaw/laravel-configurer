@@ -18,18 +18,23 @@ use function Laravel\Prompts\warning;
 class Show extends Command
 {
     protected $signature = 'configurer:show
-                            {--tags=* : Show the libraries that contain the given tags.}';
+                            {--tags=* : Show the libraries that contain the given tags.}
+                            {--with-migrations : Show only the libraries that have migrations.}';
 
     public function handle(
         Repository $config
     ): void {
-        $allLibraries = collect($config->get('configurer.libraries', []))
-            ->when(
-                $this->option('tags'),
-                fn (Enumerable $libraries) => $libraries->filter(
-                    fn (array $library) => collect($library['tags'] ?? [])->intersect($this->option('tags'))->isNotEmpty()
-                )
-            );
+        $allLibraries = collect($config->get('configurer.libraries', []))->when(
+            $this->option('tags'),
+            fn (Enumerable $libraries) => $libraries->filter(
+                fn (array $library) => collect($library['tags'] ?? [])->intersect($this->option('tags'))->isNotEmpty()
+            )
+        )->when(
+            $this->option('with-migrations'),
+            fn (Enumerable $libraries) => $libraries->filter(
+                fn (array $library) => $library['needsMigrating'] ?? false
+            )
+        );
 
         if ($allLibraries->isEmpty()) {
             warning('No libraries found with the given tags.');
@@ -40,8 +45,8 @@ class Show extends Command
         $map = $allLibraries->map(static fn (array $library) => [
             'Library' => $library['name'],
             'Tags' => implode(', ', $library['tags']),
-            'HasMigrations' => $library['needsMigrating'] ?? false,
-            'HasEnvVars' => array_key_exists('envVars', $library) ?? false,
+            'HasMigrations' => ($library['needsMigrating'] ?? false) ? 'Yes' : 'No',
+            'HasEnvVars' => (array_key_exists('envVars', $library) ?? false) ? 'Yes' : 'No',
             'GitHub' => $library['github'],
         ]);
 
