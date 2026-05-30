@@ -173,6 +173,17 @@ return [
             'tags' => ['spatie', 'tinker', 'debug'],
             'github' => 'https://github.com/spatie/laravel-web-tinker',
         ],
+        [
+            'name' => 'Spatie Activity Log',
+            'command' => 'spatie/laravel-activitylog',
+            'needsMigrating' => true,
+            'publishCommands' => [
+                'provider' => Spatie\Activitylog\ActivitylogServiceProvider::class,
+                'tags' => ['activitylog-migrations', 'activitylog-config'],
+            ],
+            'tags' => ['spatie', 'activitylog'],
+            'github' => 'https://github.com/spatie/laravel-activitylog',
+        ],
         // Filament
         [
             'name' => 'Filament',
@@ -216,6 +227,16 @@ return [
             'command' => 'jenssegers/optimus',
             'tags' => ['jenssegers', 'optimus', 'id', 'encoding', 'security'],
             'github' => 'https://github.com/jenssegers/optimus',
+        ],
+        [
+            'name' => 'Laravel Impersonate',
+            'command' => 'lab404/laravel-impersonate',
+            'publishCommands' => [
+                'provider' => Lab404\Impersonate\ImpersonateServiceProvider::class,
+                'tags' => ['impersonate'],
+            ],
+            'tags' => ['laravel', 'impersonate'],
+            'github' => 'https://github.com/404labfr/laravel-impersonate',
         ],
         // Debug libraries
         [
