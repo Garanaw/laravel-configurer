@@ -149,6 +149,18 @@ return [
             'github' => 'https://github.com/spatie/laravel-medialibrary',
         ],
         [
+            'name' => 'Spatie Ignition',
+            'command' => 'spatie/ignition',
+            'tags' => ['spatie', 'ignition', 'debug'],
+            'github' => 'https://github.com/spatie/ignition',
+        ],
+        [
+            'name' => 'Spatie Error Solutions',
+            'command' => 'spatie/error-solutions',
+            'tags' => ['spatie', 'error-solutions', 'debug'],
+            'github' => 'https://github.com/spatie/error-solutions',
+        ],
+        [
             'name' => 'Spatie Laravel Tags',
             'command' => 'spatie/laravel-tags',
             'publishCommands' => [
@@ -161,6 +173,20 @@ return [
             'needsMigrating' => true,
             'tags' => ['spatie', 'tags'],
             'github' => 'https://github.com/spatie/laravel-tags',
+        ],
+        [
+            'name' => 'Spatie Laravel Model Flags',
+            'command' => 'spatie/laravel-model-flags',
+            'publishCommands' => [
+                'provider' => Spatie\ModelFlags\ModelFlagsServiceProvider::class,
+                'tags' => [
+                    'model-flags-migrations',
+                    'model-flags-config',
+                ],
+            ],
+            'needsMigrating' => true,
+            'tags' => ['spatie', 'model-flags'],
+            'github' => 'https://github.com/spatie/laravel-model-flags',
         ],
         [
             'name' => 'Spatie Laravel Web Tinker',
@@ -183,6 +209,24 @@ return [
             ],
             'tags' => ['spatie', 'activitylog'],
             'github' => 'https://github.com/spatie/laravel-activitylog',
+        ],
+        [
+            'name' => 'Sun',
+            'command' => 'spatie/sun',
+            'tags' => ['spatie', 'support', 'sun', 'geo'],
+            'github' => 'https://github.com/spatie/sun',
+        ],
+        [
+            'name' => 'Spatie Opening Hours',
+            'command' => 'spatie/opening-hours',
+            'tags' => ['spatie', 'opening-hours', 'support', 'time'],
+            'github' => 'https://github.com/spatie/opening-hours',
+        ],
+        [
+            'name' => 'Spatie Color',
+            'command' => 'spatie/color',
+            'tags' => ['spatie', 'color', 'support', 'colors', 'ui'],
+            'github' => 'https://github.com/spatie/color',
         ],
         // Filament
         [
