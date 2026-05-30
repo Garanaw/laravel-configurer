@@ -207,7 +207,7 @@ return [
                 'provider' => Spatie\Activitylog\ActivitylogServiceProvider::class,
                 'tags' => ['activitylog-migrations', 'activitylog-config'],
             ],
-            'tags' => ['spatie', 'activitylog'],
+            'tags' => ['spatie', 'activitylog', 'monitoring'],
             'github' => 'https://github.com/spatie/laravel-activitylog',
         ],
         [

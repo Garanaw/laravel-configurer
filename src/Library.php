@@ -16,6 +16,8 @@ use Illuminate\Support\Fluent;
  * @property-read ?bool $needsMigrating
  * @property-read bool $canBeDevOnly
  * @property-read ?array $envVars
+ * @property-read list<string> $tags
+ * @property-read string $site
  * @property bool $required
  * @property bool $published
  * @property bool $installed
@@ -30,6 +32,8 @@ class Library extends Fluent
         bool $needsMigrating = false,
         bool $canBeDevOnly = false,
         ?array $envVars = null,
+        array $tags = [],
+        string $site = 'Not Specified',
     ) {
         parent::__construct([
             'name' => $name,
@@ -39,6 +43,8 @@ class Library extends Fluent
             'canBeDevOnly' => $canBeDevOnly,
             'publishCommands' => $publishCommands,
             'envVars' => $envVars,
+            'tags' => $tags,
+            'site' => $site,
             'required' => false,
             'published' => false,
             'installed' => false,

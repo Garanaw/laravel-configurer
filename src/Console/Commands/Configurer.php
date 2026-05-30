@@ -162,6 +162,8 @@ class Configurer extends Command
                 needsMigrating: $library['needsMigrating'] ?? false,
                 canBeDevOnly: $library['canBeDevOnly'] ?? false,
                 envVars: $library['envVars'] ?? null,
+                tags: $library['tags'] ?? [],
+                site: $library['site'] ?? 'Not Specified',
             );
         }
 
