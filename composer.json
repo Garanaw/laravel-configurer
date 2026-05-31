@@ -7,12 +7,18 @@
     },
     "require-dev": {
         "laravel/pint": "^1.29",
-        "orchestra/testbench": "^11.1"
+        "orchestra/testbench": "^11.1",
+        "pestphp/pest": "^4.7"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
             "Garanaw\\LaravelConfigurer\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Garanaw\\LaravelConfigurer\\Tests\\": "tests"
         }
     },
     "authors": [
@@ -23,7 +29,10 @@
     ],
     "config": {
         "optimize-autoloader": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "extra": {
         "laravel": {
