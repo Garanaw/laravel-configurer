@@ -9,7 +9,6 @@ use Garanaw\LaravelConfigurer\Contracts\Pipe;
 use Garanaw\LaravelConfigurer\Dto\Passable;
 use Garanaw\LaravelConfigurer\Library;
 use Garanaw\LaravelConfigurer\Mechanisms\KhanSort;
-use Illuminate\Console\Concerns\InteractsWithIO;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Enumerable;
 
@@ -79,7 +78,7 @@ class InstallerPipe implements Pipe
     }
 
     /**
-     * @param Enumerable<Library> $libraries
+     * @param  Enumerable<Library>  $libraries
      * @return Enumerable<InstallCommand>
      */
     protected function getCommands(Enumerable $libraries, Passable $passable): Enumerable

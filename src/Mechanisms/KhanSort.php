@@ -42,7 +42,7 @@ class KhanSort
             foreach ($command->dependsOn() as $depRaw) {
                 $dependencyId = $this->normalizeId($depRaw);
 
-                if (!isset($graph[$dependencyId])) {
+                if (! isset($graph[$dependencyId])) {
                     throw new RuntimeException(
                         "Dependency '{$dependencyId}' not found. Required by '{$id}'"
                     );
@@ -64,7 +64,7 @@ class KhanSort
         $this->sortQueue($queue, $map); // determinism
 
         // 4. Kahn
-        while (!empty($queue)) {
+        while (! empty($queue)) {
             $current = array_shift($queue);
             $sorted[] = $current;
 

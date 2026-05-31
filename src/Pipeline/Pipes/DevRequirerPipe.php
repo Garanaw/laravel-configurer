@@ -10,8 +10,8 @@ use Garanaw\LaravelConfigurer\Library;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Composer;
-
 use Illuminate\Support\Enumerable;
+
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;

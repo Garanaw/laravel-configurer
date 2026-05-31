@@ -143,7 +143,7 @@ return [
                 'tags' => [
                     'medialibrary-migrations',
                     'medialibrary-config',
-                ]
+                ],
             ],
             'tags' => ['spatie', 'medialibrary'],
             'github' => 'https://github.com/spatie/laravel-medialibrary',

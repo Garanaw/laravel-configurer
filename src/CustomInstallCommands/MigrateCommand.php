@@ -9,6 +9,7 @@ use Garanaw\LaravelConfigurer\Dto\Passable;
 use Illuminate\Console\Concerns\InteractsWithIO;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Process;
+
 use function Illuminate\Support\artisan_binary;
 use function Illuminate\Support\php_binary;
 
